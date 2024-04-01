@@ -167,10 +167,10 @@
             <div class="col-md-6 mt-3">
               <div class="coupon-card p-4">
                 <h4 class="coupon-title">20% Off Coupon</h4>
-
                 <div
-                  class="my-5"
                   style="
+                    margin-top: 24px;
+                    margin-bottom: 24px;
                     width: 100%;
                     height: 400px;
                     overflow: hidden;
@@ -179,7 +179,7 @@
                 >
                   <img
                     src="/20Percent.jpg"
-                    alt=""
+                    alt="20% coupon image"
                     style="width: 100%; height: 100%; object-fit: cover"
                   />
                 </div>
@@ -194,7 +194,7 @@
                 </p>
                 <div class="d-flex justify-content-center mt-5">
                   <button
-                  type="button"
+                    type="button"
                     @click="copyToClipboard('Reading')"
                     class="btn btn-primary"
                   >
@@ -207,8 +207,9 @@
               <div class="coupon-card p-4">
                 <h4 class="coupon-title">50% Off Coupon</h4>
                 <div
-                  class="my-5"
                   style="
+                    margin-top: 24px;
+                    margin-bottom: 24px;
                     width: 100%;
                     height: 400px;
                     overflow: hidden;
@@ -231,7 +232,7 @@
                 </p>
                 <div class="d-flex justify-content-center mt-5">
                   <button
-                  type="button"
+                    type="button"
                     @click="copyToClipboard('Literature')"
                     class="btn btn-primary"
                   >
