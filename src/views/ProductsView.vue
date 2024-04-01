@@ -1,69 +1,58 @@
 <template>
   <loading v-model:active="isLoading"></loading>
   <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-3">
-        <div
-          id="collapseOne"
-          class="collapse show"
-          aria-labelledby="headingOne"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="card-body py-0">
-            <h2>Categories</h2>
-            <ul class="list-unstyled">
-              <li>
-                <router-link class="py-2 d-block text-muted" :to="`/products`"
-                  >All</router-link
-                >
-              </li>
-              <li v-for="item in categories" :key="item">
-                <router-link
-                  class="py-2 d-block text-muted"
-                  :to="`/products?categories=${item}`"
-                  >{{ item }}</router-link
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div class="row">
-          <div
-            class="col-md-4 d-flex align-items-stretch"
-            v-for="product in products"
-            :key="product.id"
+    <h2>Categories</h2>
+    <div class="row my-4">
+      <div id="categoriesScroll" class="overflow-auto">
+        <nav class="nav d-flex flex-nowrap">
+          <router-link class="nav-link py-2 px-3 text-muted" :to="`/products`"
+            >All</router-link
           >
-            <div class="card mb-3 w-100 d-flex flex-column">
-              <img
-                style="object-fit: cover"
-                :src="product.imageUrl"
-                class="card-img-top"
-                alt="產品圖片"
-              />
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title">{{ product.title }}</h5>
-                <p class="card-text flex-grow-1">NTD ${{ product.price }}</p>
-                <div class="mt-2 mb-2">
-                  <router-link
-                    :to="`/product/${product.id}`"
-                    class="btn btn-outline-secondary w-50 gx-3"
-                    >View More</router-link
-                  >
-                  <a
-                    @click.prevent="addToCart(product.id)"
-                    href="#"
-                    class="btn btn-outline-info w-50 gx-3"
-                    >Add to Cart</a
-                  >
-                </div>
-              </div>
+          <router-link
+            v-for="item in categories"
+            :key="item"
+            class="nav-link py-2 px-3 text-muted"
+            :to="`/products?categories=${item}`"
+            >{{ item }}</router-link
+          >
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div
+        class="col-md-4 d-flex align-items-stretch"
+        v-for="product in products"
+        :key="product.id"
+      >
+        <div class="card mb-3 w-100 d-flex flex-column">
+          <img
+            style="object-fit: cover"
+            :src="product.imageUrl"
+            class="card-img-top"
+            alt="產品圖片"
+          />
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ product.title }}</h5>
+            <p class="card-text flex-grow-1">NTD ${{ product.price }}</p>
+            <div class="mt-2 mb-2">
+              <router-link
+                :to="`/product/${product.id}`"
+                class="btn btn-outline-secondary w-50 gx-3"
+                >View More</router-link
+              >
+              <a
+                @click.prevent="addToCart(product.id)"
+                href="#"
+                class="btn btn-outline-info w-50 gx-3"
+                >Add to Cart</a
+              >
             </div>
           </div>
         </div>
-        <pagC :pages="pages" :getProduct="getProduct" basePath="#/" />
       </div>
+
+      <pagC :pages="pages" :getProduct="getProduct" basePath="#/" />
     </div>
   </div>
 </template>
