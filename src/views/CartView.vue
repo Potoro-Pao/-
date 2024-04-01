@@ -1,6 +1,7 @@
 <template>
   <loading v-model:active="isLoading"></loading>
   <div class="container mt-4">
+    <!-- Toast Notifications -->
     <div
       aria-live="polite"
       aria-atomic="true"
@@ -15,93 +16,94 @@
         aria-atomic="true"
       >
         <div :class="['toast-body', toastClass]">
-          Your coupon has been applied successfully!
+          {{
+            showToast
+              ? 'Your coupon has been applied successfully!'
+              : 'Your coupon is invalid!'
+          }}
         </div>
       </div>
-      <div
-        ref="invalidToast"
-        class="toast"
-        role="alert"
-        aria-live="assertive"
-        aria-atomic="true"
-      >
-        <div :class="['toast-body', toastClass]">Your coupon is invalid!</div>
-      </div>
     </div>
+
+    <!-- Coupon Code Section -->
     <div class="row mb-3">
       <div class="col-12">
-        <label for="couponCode">Coupon Code:</label>
-        <input
-          type="text"
-          id="couponCode"
-          v-model="couponCode"
-          placeholder="Enter coupon code"
-          class="form-control"
-        />
-        <div class="alert alert-info mt-2">Code: Reading</div>
-        <div class="alert alert-primary mt-2">Code: Literature</div>
-        <button type="button" class="btn btn-success mt-2" @click="applyCoupon">
-          Apply Coupon
-        </button>
+        <label for="couponCode" class="form-label">Coupon Code:</label>
+        <div class="input-group mb-2">
+          <input
+            type="text"
+            id="couponCode"
+            v-model="couponCode"
+            placeholder="Enter coupon code"
+            class="form-control"
+          />
+          <button class="btn btn-success" @click="applyCoupon">
+            Apply Coupon
+          </button>
+        </div>
+        <p class="alert alert-info mt-2">Code: Reading</p>
+        <p class="alert alert-primary mt-2">Code: Literature</p>
       </div>
     </div>
+
+    <!-- Shopping Cart Table -->
     <div class="row">
       <div class="col-12">
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
               <tr>
-                <th scope="col" style="width: 50px">#</th>
+                <th scope="col">#</th>
                 <th scope="col">Item</th>
+                <th scope="col">Title</th>
                 <th scope="col">Price</th>
-                <th scope="col" style="width: 120px">Quantity</th>
+                <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
-                <th scope="col" style="width: 100px">Remove</th>
+                <th scope="col">Remove</th>
               </tr>
             </thead>
             <tbody v-if="cart.length > 0">
               <tr v-for="(item, index) in cart" :key="item.id">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>
-                  <div class="row">
-                    <div class="col-md-3">
-                      <img
-                        :src="item.product.imageUrl"
-                        class="img-fluid"
-                        alt="Item"
-                      />
-                    </div>
-                    <div class="col-md-9">
-                      <div>{{ item.product.title }}</div>
-                      <div class="text-muted">
-                        {{ item.product.origin_price }}
-                      </div>
-                    </div>
+                  <div class="d-flex align-items-center">
+                    <img
+                      :src="item.product.imageUrl"
+                      class="img-fluid me-3"
+                      alt="Item"
+                      style="width: 80px; height: auto"
+                    />
                   </div>
                 </td>
-                <td>${{ item.product.price }}</td>
                 <td>
-                  <div class="btn-group" role="group">
+                  {{ item.product.title }}
+                </td>
+                <td>
+                  <span class="text-danger" v-if="item.product.discountPrice">
+                    ${{ item.product.discountPrice }}
+                  </span>
+                  <span v-else>${{ item.product.price }}</span>
+                  <span v-if="item.product.discountPrice" class="text-muted">
+                    <del>${{ item.product.origin_price }}</del>
+                  </span>
+                </td>
+                <td>
+                  <div class="d-flex justify-content-center align-items-center">
                     <button
-                      type="button"
-                      class="btn btn-secondary"
-                      v-if="item.qty > 1"
-                      @click="
-                        item.qty--;
-                        changeCartQty(item, item.qty);
-                      "
+                      class="btn btn-outline-secondary"
+                      @click="item.qty > 1 ? item.qty-- : null"
                     >
                       -
                     </button>
                     <input
                       type="text"
-                      class="form-control text-center"
-                      :value="item.qty"
-                      disabled
+                      class="form-control text-center mx-2"
+                      v-model="item.qty"
+                      readonly
+                      style="max-width: 60px; min-width: 40px"
                     />
                     <button
-                      type="button"
-                      class="btn btn-secondary"
+                      class="btn btn-outline-secondary"
                       @click="
                         item.qty++;
                         changeCartQty(item, item.qty);
@@ -111,67 +113,41 @@
                     </button>
                   </div>
                 </td>
-                <td>${{ item.qty * item.product.price }}</td>
+                <td>
+                  ${{
+                    item.qty *
+                    (item.product.discountPrice || item.product.price)
+                  }}
+                </td>
                 <td>
                   <button
-                    type="button"
                     class="btn btn-danger"
                     @click="removeCartItem(item.id)"
                   >
-                    X
+                    ×
                   </button>
                 </td>
               </tr>
             </tbody>
             <tbody v-else>
               <tr>
-                <td colspan="6" class="text-center text-danger">
-                  There is nothing in the cart!
+                <td colspan="7" class="text-center text-danger">
+                  Your cart is empty.
                 </td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <td
-                  colspan="4"
-                  class="text-right font-weight-bold subtotal-total-label"
-                >
-                  Subtotal:
-                </td>
-                <td colspan="2" class="text-right subtotal-total-value">
-                  ${{ this.total }}
-                </td>
+                <th colspan="5" class="text-end">Subtotal:</th>
+                <th colspan="3">${{ total }}</th>
+              </tr>
+              <tr v-if="discount">
+                <th colspan="5" class="text-end">Discount:</th>
+                <th colspan="3" class="text-success">-${{ discount }}</th>
               </tr>
               <tr>
-                <td
-                  colspan="4"
-                  class="text-right font-weight-bold subtotal-total-label"
-                >
-                  Total:
-                </td>
-                <td
-                  colspan="2"
-                  class="text-right font-weight-bold subtotal-total-value"
-                >
-                  ${{ this.final_total }}
-                </td>
-              </tr>
-              <tr v-if="this.discount">
-                <td
-                  colspan="4"
-                  class="text-right font-weight-bold subtotal-total-label"
-                >
-                  Discount:
-                </td>
-                <td
-                  colspan="2"
-                  class="text-right text-success subtotal-total-value"
-                >
-                  -$
-                  {{
-                    this.discount === 0 ? this.refreshDiscount : this.discount
-                  }}
-                </td>
+                <th colspan="5" class="text-end">Total:</th>
+                <td colspan="3">${{ final_total }}</td>
               </tr>
             </tfoot>
           </table>
@@ -187,7 +163,7 @@
           >Browse More Products</router-link
         >
         <button
-        type="button"
+          type="button"
           class="btn btn-danger"
           v-if="cart.length > 0"
           @click.prevent="removeAllItems"

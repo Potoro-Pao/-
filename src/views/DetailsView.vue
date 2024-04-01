@@ -94,7 +94,7 @@
       <div class="row">
         <h3
           v-if="product.imagesUrl && product.imagesUrl.length > 0"
-          class="mb-3"
+          class="mb-5 mt-4"
         >
           Image Gallery
         </h3>
