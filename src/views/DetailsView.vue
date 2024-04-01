@@ -2,7 +2,7 @@
   <div class="container my-5">
     <div class="row">
       <div class="col-lg-8">
-        <div class="card">
+        <div class="card rounded-0">
           <div class="row g-0">
             <div class="col-md-5">
               <img
@@ -29,7 +29,7 @@
       </div>
       <!-- Price & Checkout Card -->
       <div class="col-lg-4">
-        <div class="card">
+        <div class="card rounded-0">
           <div class="card-body">
             <h5 class="card-title">{{ product.price }}</h5>
             <h5
@@ -59,7 +59,7 @@
               </button>
             </div>
             <button
-            type="button"
+              type="button"
               @click.prevent="addToCart(product.id, this.qty)"
               class="btn btn-primary"
             >
@@ -73,9 +73,22 @@
   <div class="container">
     <div class="row">
       <h3>Short Description</h3>
-      <p class="card-text" style="line-height: 2; font-size: 1.125rem">
-        {{ product.content }}
-      </p>
+      <!-- 只有当 product.content 存在时，才尝试渲染内容 -->
+      <div v-if="product.content">
+        <p
+          class="card-text"
+          style="line-height: 2; font-size: 1.125rem"
+          v-if="!showFullContent"
+        >
+          {{ product.content.substring(0, 100) + '...' }}
+          <button @click="toggleContent" class="btn btn-link">Read more</button>
+        </p>
+        <p class="card-text" style="line-height: 2; font-size: 1.125rem" v-else>
+          {{ product.content }}
+          <button @click="toggleContent" class="btn btn-link">Read less</button>
+        </p>
+      </div>
+      <p v-else>Loading description...</p>
     </div>
     <div class="container">
       <div class="row">
@@ -110,7 +123,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from 'axios';
 import { mapActions } from 'pinia';
@@ -123,6 +135,7 @@ export default {
     return {
       product: {},
       qty: 1,
+      showFullContent: false, // 控制内容展示状态的变量
       format: {
         author: '',
         ISBN: '',
@@ -135,7 +148,9 @@ export default {
     formated(format) {
       this.format = JSON.parse(format);
     },
-
+    toggleContent() {
+      this.showFullContent = !this.showFullContent; // 切换展示内容的状态
+    },
     ...mapActions(cartStore, ['addToCart']),
     getProduct() {
       const { id } = this.$route.params;
