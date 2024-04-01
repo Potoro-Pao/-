@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="text-end mt-4">
-      <button class="btn btn-primary" @click="openModal('new')">
+      <button type="button" class="btn btn-primary" @click="openModal('new')">
         Create New Product
       </button>
     </div>

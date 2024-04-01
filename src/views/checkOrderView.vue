@@ -24,7 +24,7 @@
           id="orderId"
           v-model="orderID"
         />
-        <button class="btn btn-primary mt-3" @click="searchOrder">
+        <button type="button" class="btn btn-primary mt-3" @click="searchOrder">
           Search
         </button>
       </div>
@@ -72,6 +72,7 @@
             <option>Pay when you get it (Cash on Delivery)</option>
           </select>
           <button
+          type="button"
             class="btn btn-primary mt-3"
             :disabled="!selectedPaymentMethod"
             @click="confirmOrder"

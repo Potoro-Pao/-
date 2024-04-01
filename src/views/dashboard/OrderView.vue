@@ -4,7 +4,7 @@
     <h2>Order List</h2>
     <div class="table-responsive">
       <div class="text-end mb-5">
-        <button @click="removeAllOrders" class="btn btn-danger">
+        <button type="button" @click="removeAllOrders" class="btn btn-danger">
           Remove All Orders
         </button>
       </div>

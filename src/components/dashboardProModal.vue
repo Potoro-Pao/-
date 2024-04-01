@@ -50,6 +50,7 @@
                 </div>
               </div>
               <button
+                type="button"
                 class="btn btn-outline-primary w-100"
                 @click="editProduct.imagesUrl.push('')"
                 v-if="
@@ -60,6 +61,7 @@
               Add
               </button>
               <button
+              type="button"
                 v-else
                 class="btn btn-outline-danger w-100"
                 @click="editProduct.imagesUrl.pop()"

@@ -194,6 +194,7 @@
                 </p>
                 <div class="d-flex justify-content-center mt-5">
                   <button
+                  type="button"
                     @click="copyToClipboard('Reading')"
                     class="btn btn-primary"
                   >
@@ -230,6 +231,7 @@
                 </p>
                 <div class="d-flex justify-content-center mt-5">
                   <button
+                  type="button"
                     @click="copyToClipboard('Literature')"
                     class="btn btn-primary"
                   >

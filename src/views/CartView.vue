@@ -40,7 +40,7 @@
         />
         <div class="alert alert-info mt-2">Code: Reading</div>
         <div class="alert alert-primary mt-2">Code: Literature</div>
-        <button class="btn btn-success mt-2" @click="applyCoupon">
+        <button type="button" class="btn btn-success mt-2" @click="applyCoupon">
           Apply Coupon
         </button>
       </div>
@@ -131,47 +131,49 @@
               </tr>
             </tbody>
             <tfoot>
-          <tr>
-            <td
-              colspan="4"
-              class="text-right font-weight-bold subtotal-total-label"
-            >
-              Subtotal:
-            </td>
-            <td colspan="2" class="text-right subtotal-total-value">
-              ${{ this.total }}
-            </td>
-          </tr>
-          <tr>
-            <td
-              colspan="4"
-              class="text-right font-weight-bold subtotal-total-label"
-            >
-              Total:
-            </td>
-            <td
-              colspan="2"
-              class="text-right font-weight-bold subtotal-total-value"
-            >
-              ${{ this.final_total }}
-            </td>
-          </tr>
-          <tr v-if="this.discount">
-            <td
-              colspan="4"
-              class="text-right font-weight-bold subtotal-total-label"
-            >
-              Discount:
-            </td>
-            <td
-              colspan="2"
-              class="text-right text-success subtotal-total-value"
-            >
-              -$
-              {{ this.discount === 0 ? this.refreshDiscount : this.discount }}
-            </td>
-          </tr>
-        </tfoot>
+              <tr>
+                <td
+                  colspan="4"
+                  class="text-right font-weight-bold subtotal-total-label"
+                >
+                  Subtotal:
+                </td>
+                <td colspan="2" class="text-right subtotal-total-value">
+                  ${{ this.total }}
+                </td>
+              </tr>
+              <tr>
+                <td
+                  colspan="4"
+                  class="text-right font-weight-bold subtotal-total-label"
+                >
+                  Total:
+                </td>
+                <td
+                  colspan="2"
+                  class="text-right font-weight-bold subtotal-total-value"
+                >
+                  ${{ this.final_total }}
+                </td>
+              </tr>
+              <tr v-if="this.discount">
+                <td
+                  colspan="4"
+                  class="text-right font-weight-bold subtotal-total-label"
+                >
+                  Discount:
+                </td>
+                <td
+                  colspan="2"
+                  class="text-right text-success subtotal-total-value"
+                >
+                  -$
+                  {{
+                    this.discount === 0 ? this.refreshDiscount : this.discount
+                  }}
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -185,6 +187,7 @@
           >Browse More Products</router-link
         >
         <button
+        type="button"
           class="btn btn-danger"
           v-if="cart.length > 0"
           @click.prevent="removeAllItems"

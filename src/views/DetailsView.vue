@@ -59,6 +59,7 @@
               </button>
             </div>
             <button
+            type="button"
               @click.prevent="addToCart(product.id, this.qty)"
               class="btn btn-primary"
             >
