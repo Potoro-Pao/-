@@ -25,30 +25,11 @@
       </div>
     </div>
 
-    <!-- Coupon Code Section -->
-    <div class="row mb-3">
-      <div class="col-12">
-        <label for="couponCode" class="form-label">Coupon Code:</label>
-        <div class="input-group mb-2">
-          <input
-            type="text"
-            id="couponCode"
-            v-model="couponCode"
-            placeholder="Enter coupon code"
-            class="form-control"
-          />
-          <button class="btn btn-success" @click="applyCoupon">
-            Apply Coupon
-          </button>
-        </div>
-        <p class="alert alert-info mt-2">Code: Reading</p>
-        <p class="alert alert-primary mt-2">Code: Literature</p>
-      </div>
-    </div>
-
-    <!-- Shopping Cart Table -->
+    <!-- Main Section -->
     <div class="row">
-      <div class="col-12">
+      <!-- Shopping Cart Table -->
+      <div class="col-lg-8">
+        <h5 class="mb-3">Your Shopping Cart</h5>
         <div class="table-responsive">
           <table class="table table-hover">
             <thead>
@@ -66,26 +47,22 @@
               <tr v-for="(item, index) in cart" :key="item.id">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>
-                  <div class="d-flex align-items-center">
-                    <img
-                      :src="item.product.imageUrl"
-                      class="img-fluid me-3"
-                      alt="Item"
-                      style="width: 80px; height: auto"
-                    />
-                  </div>
+                  <img
+                    :src="item.product.imageUrl"
+                    class="img-fluid me-3"
+                    alt="Item"
+                    style="width: 80px; height: auto"
+                  />
                 </td>
+                <td>{{ item.product.title }}</td>
                 <td>
-                  {{ item.product.title }}
-                </td>
-                <td>
-                  <span class="text-danger" v-if="item.product.discountPrice">
-                    ${{ item.product.discountPrice }}
-                  </span>
+                  <span class="text-danger" v-if="item.product.discountPrice"
+                    >${{ item.product.discountPrice }}</span
+                  >
                   <span v-else>${{ item.product.price }}</span>
-                  <span v-if="item.product.discountPrice" class="text-muted">
-                    <del>${{ item.product.origin_price }}</del>
-                  </span>
+                  <span v-if="item.product.discountPrice" class="text-muted"
+                    ><del>${{ item.product.origin_price }}</del></span
+                  >
                 </td>
                 <td>
                   <div class="d-flex justify-content-center align-items-center">
@@ -136,40 +113,67 @@
                 </td>
               </tr>
             </tbody>
-            <tfoot>
-              <tr>
-                <th colspan="5" class="text-end">Subtotal:</th>
-                <th colspan="3">${{ total }}</th>
-              </tr>
-              <tr v-if="discount">
-                <th colspan="5" class="text-end">Discount:</th>
-                <th colspan="3" class="text-success">-${{ discount }}</th>
-              </tr>
-              <tr>
-                <th colspan="5" class="text-end">Total:</th>
-                <td colspan="3">${{ final_total }}</td>
-              </tr>
-            </tfoot>
           </table>
         </div>
-      </div>
-    </div>
-    <div class="row mb-3">
-      <div class="col-12 d-flex justify-content-between">
-        <router-link to="/form" v-if="cart.length > 0" class="btn btn-info"
-          >Proceed to Checkout</router-link
-        >
-        <router-link to="/products" v-else class="btn btn-danger"
-          >Browse More Products</router-link
-        >
         <button
           type="button"
-          class="btn btn-danger"
+          class="btn btn-danger mt-2"
           v-if="cart.length > 0"
           @click.prevent="removeAllItems"
         >
           Remove All
         </button>
+      </div>
+
+      <!-- Checkout Details -->
+      <div class="col-lg-4">
+        <h5 class="mb-3">Apply Coupon</h5>
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            id="couponCode"
+            v-model="couponCode"
+            placeholder="Enter coupon code"
+            class="form-control"
+          />
+          <button class="btn btn-success" @click="applyCoupon">
+            Apply Coupon
+          </button>
+        </div>
+        <div class="mb-3">
+          <p class="alert alert-info">Code: Reading</p>
+          <p class="alert alert-primary">Code: Literature</p>
+        </div>
+
+        <h5 class="mb-3">Order Summary</h5>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>Subtotal:</div>
+            <div>${{ total }}</div>
+          </li>
+          <li
+            class="list-group-item d-flex justify-content-between lh-sm text-success"
+            v-if="discount"
+          >
+            <div>Discount:</div>
+            <div>-${{ discount }}</div>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div><strong>Total:</strong></div>
+            <div>
+              <strong>${{ final_total }}</strong>
+            </div>
+          </li>
+        </ul>
+        <router-link
+          to="/form"
+          v-if="cart.length > 0"
+          class="btn btn-primary mt-3"
+          >Proceed to Checkout</router-link
+        >
+        <router-link to="/products" v-else class="btn btn-secondary mt-3"
+          >Browse More Products</router-link
+        >
       </div>
     </div>
   </div>
