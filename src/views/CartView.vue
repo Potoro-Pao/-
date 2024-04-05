@@ -25,7 +25,9 @@
         aria-live="assertive"
         aria-atomic="true"
       >
-        <div :class="['toast-body', toastClass]">Your coupon is invalid!</div>
+        <div :class="['toast-body', toastClass]">
+          An error occurred. Please try again.
+        </div>
       </div>
     </div>
 
@@ -35,82 +37,92 @@
       <div class="col-lg-8">
         <h5 class="mb-3">Your Shopping Cart</h5>
         <div v-if="cart.length > 0">
-          <div v-for="item in cart" :key="item.id" class="mb-4">
-            <!-- 商品信息 -->
-            <div class="d-flex align-items-center mb-2">
-              <div class="flex-shrink-0">
+          <div v-for="item in cart" :key="item.id" class="card mb-3">
+            <div class="row g-0">
+              <div
+                class="col-4 d-flex align-items-center justify-content-center p-2"
+              >
                 <img
                   :src="item.product.imageUrl"
                   class="img-fluid"
                   alt="Item"
-                  style="width: 80px; height: auto"
+                  style="max-width: 80%; height: auto"
                 />
               </div>
-              <div class="flex-grow-1 ms-3">
-                <h6>{{ item.product.title }}</h6>
-                <p>
-                  <span class="text-danger" v-if="item.product.discountPrice"
-                    >${{ item.product.discountPrice }}</span
+              <div class="col-8">
+                <div class="card-body">
+                  <h6 class="card-title">{{ item.product.title }}</h6>
+                  <p class="card-text">
+                    <small
+                      class="text-muted"
+                      v-if="item.product.origin_price > item.product.price"
+                    >
+                      Origin Price: <del>${{ item.product.origin_price }}</del>
+                    </small>
+                    <br />
+                    Sale Price: ${{ item.product.price }}
+                  </p>
+                  <p class="card-text">
+                    <small>Total: ${{ item.product.price * item.qty }}</small>
+                  </p>
+                  <div
+                    class="d-flex flex-wrap justify-content-between align-items-center"
                   >
-                  <span v-else>${{ item.product.price }}</span>
-                  <span v-if="item.product.discountPrice" class="text-muted"
-                    ><del>${{ item.product.origin_price }}</del></span
-                  >
-                </p>
-              </div>
-            </div>
-            <!-- 修改商品数量和移除功能 -->
-            <div class="d-flex justify-content-between">
-              <div>
-                <div class="d-flex justify-content-center align-items-center">
-                  <button
-                    class="btn btn-outline-secondary"
-                    @click="item.qty > 1 ? item.qty-- : null"
-                  >
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    class="form-control text-center mx-2"
-                    v-model="item.qty"
-                    readonly
-                    style="max-width: 60px"
-                  />
-                  <button
-                    class="btn btn-outline-secondary"
-                    @click="
-                      item.qty++;
-                      changeCartQty(item, item.qty);
-                    "
-                  >
-                    +
-                  </button>
+                    <div
+                      class="btn-group me-2"
+                      role="group"
+                      aria-label="Quantity"
+                    >
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        @click="item.qty > 1 ? item.qty-- : null"
+                      >
+                        -
+                      </button>
+                      <input
+                        type="text"
+                        class="form-control text-center"
+                        v-model="item.qty"
+                        readonly
+                        style="max-width: 50px"
+                      />
+                      <button
+                        class="btn btn-outline-secondary btn-sm"
+                        @click="
+                          item.qty++;
+                          changeCartQty(item, item.qty);
+                        "
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      class="btn btn-danger btn-sm mt-4"
+                      @click="removeCartItem(item.id)"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div>
-                <button class="btn btn-danger" @click="removeCartItem(item.id)">
-                  ×
-                </button>
-              </div>
             </div>
-            <hr />
           </div>
           <button
             type="button"
-            class="btn btn-danger mt-2"
+            class="btn btn-warning mt-2"
             @click.prevent="removeAllItems"
           >
-            Remove All
+            Clear Cart
           </button>
         </div>
-        <div v-else>
-          <p class="text-center text-danger">Your cart is empty.</p>
+        <div v-else class="alert alert-warning" role="alert">
+          Your cart is empty.
         </div>
       </div>
 
       <!-- Checkout Details -->
       <div class="col-lg-4">
-        <h5 class="mb-3">Apply Coupon</h5>
+        <h5 class="mb-3 mt-5">Apply Coupon</h5>
         <div class="input-group mb-3">
           <input
             type="text"
@@ -215,7 +227,7 @@ export default {
     ]),
     applyCoupon() {
       if (this.cart.length === 0) {
-        console.log('Cart is empty');
+        this.onToastCalled();
         return;
       }
       if (!this.couponCode) {
