@@ -89,7 +89,7 @@
               ></i>
               <span
                 class="position-absolute top-0 start-100
-                 translate-middle badge rounded-pill bg-danger"
+                translate-middle badge rounded-pill bg-danger"
                 style="transform: translate(-50%, -50%)"
               >
                 {{ this.cart?.length }}
@@ -107,13 +107,19 @@
             to="/login"
             >Log in</router-link
           >
-          <router-link
-            v-else
-            class="nav-link"
-            style="color: #eae0d5; font-size: 18px"
-            to="/login"
-            >Log Out</router-link
+          <!-- 登出按钮 -->
+          <button
+            v-if="!isFrontView"
+            class="nav-link btn"
+            style="
+              color: #eae0d5;
+              font-size: 18px;
+              background-color: transparent;
+            "
+            @click="logOut"
           >
+            Log Out
+          </button>
         </li>
       </ul>
     </div>
@@ -121,8 +127,11 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import cartStore from '../stores/cartStore';
+
+const { VITE_URL } = import.meta.env;
 
 export default {
   props: ['basePath'],
@@ -136,6 +145,21 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ['getCart']),
+    logOut() {
+      const api = `${VITE_URL}/logout`;
+      axios
+        .post(api)
+        .then(() => {
+          this.clearCookies('hexVueToken');
+          this.$router.push('/login');
+        })
+        .catch((error) => {
+          console.error('Logout failed:', error);
+        });
+    },
+    clearCookies(name) {
+      document.cookie = `${name} =; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    },
   },
   mounted() {
     if (this.basePath === '#/') {
