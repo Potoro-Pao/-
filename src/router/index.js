@@ -2,6 +2,11 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
+    path: '/:catchAll(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/NotFoundView.vue'),
+  },
+  {
     path: '/',
     component: () => import('../views/FrontView.vue'),
     children: [

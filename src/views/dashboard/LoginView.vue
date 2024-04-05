@@ -31,18 +31,15 @@
             <label for="password">Password</label>
           </div>
           <button
-            @click="loginCheck"
             id="loginBtn"
             class="btn btn-lg btn-primary w-100 mt-3"
-            type="button"
+            type="submit"
           >
             Log in
           </button>
           <button
             @click="logBackHome"
-            id="loginBtn"
-            class="btn btn-lg btn-primary w-100 mt-3"
-            type="button"
+            class="btn btn-lg btn-secondary w-100 mt-3"
           >
             Back to Home Page
           </button>
@@ -54,11 +51,11 @@
 
 <script>
 import axios from 'axios';
+import { Toast } from 'bootstrap';
 import BgC from '../../components/BgComponent.vue';
 
 const { VITE_URL } = import.meta.env;
 
-const adminLoginAPI = `${VITE_URL}/admin/signin`;
 export default {
   data() {
     return {
@@ -81,20 +78,52 @@ export default {
         password: this.user.password,
       };
       axios
-        .post(adminLoginAPI, user)
+        .post(`${VITE_URL}/admin/signin`, user)
         .then((res) => {
           const { token, expired } = res.data;
-          document.cookie = `hexVueToken=${token}; expires=${new Date(
-            expired,
-          )}`;
-
+          document.cookie = `hexVueToken=${token}; expires=${new Date(expired)}`;
           this.$router.push('/admin/products');
           // axios.defaults.headers.common["Authorization"] = token;
           //   window.location.href = 'index.html';
         })
         .catch(() => {
-          window.location = 'login.html';
+          this.showToast(
+            'Login failed. Please check your credentials and try again.',
+            'bg-danger',
+          );
         });
+    },
+    showToast(message, className) {
+      const toastContainer = document.createElement('div');
+      toastContainer.style.position = 'fixed';
+      toastContainer.style.top = '1rem';
+      toastContainer.style.right = '1rem';
+      toastContainer.style.zIndex = '1050';
+      const toastEl = document.createElement('div');
+      toastEl.className = `toast align-items-center text-white ${className} border-0`;
+      toastEl.role = 'alert';
+      toastEl.ariaLive = 'assertive';
+      toastEl.ariaAtomic = 'true';
+      toastEl.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">
+        ${message}
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>`;
+
+      toastContainer.appendChild(toastEl);
+
+      document.body.appendChild(toastContainer);
+
+      const toast = new Toast(toastEl);
+      toast.show();
+
+      setTimeout(() => {
+        toastEl.remove();
+        toastContainer.remove();
+        this.$router.push({ name: 'NotFound' });
+      }, 2500);
     },
   },
 };
