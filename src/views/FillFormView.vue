@@ -285,19 +285,19 @@ export default {
         type === 'success' ? 'bg-success' : 'bg-danger',
         'border-0',
         'position-fixed',
-        'top-50',
-        'start-50',
-        'translate-middle',
+        'top-0',
+        'end-0',
+        'm-3',
       );
       toastEl.role = 'alert';
       toastEl.innerHTML = `
-        <div class="d-flex">
-          <div class="toast-body">
-            <i class="bi bi-check-circle"></i> ${message}
-          </div>
-          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-      `;
+    <div class="d-flex">
+      <div class="toast-body">
+        <i class="bi bi-check-circle"></i> ${message}
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  `;
       document.body.appendChild(toastEl);
       const toast = new Toast(toastEl, { autohide: true, delay: 2000 });
       toast.show();
