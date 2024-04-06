@@ -135,7 +135,6 @@ export default {
         (order) => order.id === clickedOrder.id,
       );
       this.selectedOrder = { ...this.selectedOrder };
-      //使用淺拷貝解決傳參考的連動顯示問題
       this.$refs.dOrderModal.openModal();
     },
 

@@ -95,6 +95,7 @@ import Loading from 'vue-loading-overlay';
 import axios from 'axios';
 import { mapActions } from 'pinia';
 import mapStore from '../stores/mapStore';
+import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -123,6 +124,8 @@ export default {
       'setLocationFromExternal',
       'setBookPhotoFromExternal',
     ]),
+    ...mapActions(confirmOrderDataStore, ['getOrderSuccessUserData']),
+
     confirmOrder() {
       const api = `${VITE_URL}/api/${VITE_API}/pay/${this.orderID}`;
       axios
@@ -188,9 +191,7 @@ export default {
     },
   },
   created() {
-    if (this.$route.query.data) {
-      this.checkoutData = JSON.parse(this.$route.query.data);
-    }
+    this.checkoutData = this.getOrderSuccessUserData();
   },
   mounted() {
     this.isLoading = false;

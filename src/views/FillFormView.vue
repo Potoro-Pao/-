@@ -183,6 +183,7 @@ import { mapState, mapActions } from 'pinia';
 import Loading from 'vue-loading-overlay';
 import axios from 'axios';
 import cartStore from '../stores/cartStore';
+import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 import en from '../en.json';
 
 const { VITE_URL, VITE_API } = import.meta.env;
@@ -223,6 +224,7 @@ export default {
   },
   methods: {
     ...mapActions(cartStore, ['getCart', 'deleteCartPinia']),
+    ...mapActions(confirmOrderDataStore, ['storeData']),
     sendOrder() {
       const apiFormat = {
         data: {
@@ -245,12 +247,8 @@ export default {
       axios.post(api, apiFormat).then((res) => {
         this.isLoading = false;
         this.getCart();
-        this.$router.push({
-          path: '/checkorder',
-          query: {
-            data: JSON.stringify(res.data),
-          },
-        });
+        this.storeData(res.data);
+        this.$router.push({ path: '/checkorder' });
       });
     },
     onSubmit() {
