@@ -34,8 +34,11 @@ export default defineStore('cartStore', {
       });
     },
     removeCartItem(id) {
+      this.loading = true;
+
       axios.delete(`${VITE_URL}/api/${VITE_API}/cart/${id}`).then(() => {
         this.getCart();
+        this.loading = false;
       });
     },
     deleteCart() {

@@ -98,7 +98,7 @@
                     </div>
                     <button
                       class="btn btn-danger btn-sm mt-4"
-                      @click="removeCartItem(item.id)"
+                      @click="openDelModal(item.product.title, item.id)"
                     >
                       Remove
                     </button>
@@ -172,18 +172,24 @@
       </div>
     </div>
   </div>
+  <DDM
+    :temp-product="tempProduct"
+    :delete-product="() => deleteProduct(tempProduct.id)"
+    ref="dModal"
+  ></DDM>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia';
 import { Toast } from 'bootstrap';
 import Loading from 'vue-loading-overlay';
-
+import DDM from '../components/dashboardDelModal.vue';
 import cartStore from '../stores/cartStore';
 
 export default {
   data() {
     return {
+      tempProduct: {},
       isLoading: false,
       couponCode: '',
       toastBody: null,
@@ -193,6 +199,7 @@ export default {
   },
   components: {
     Loading,
+    DDM,
   },
   computed: {
     ...mapState(cartStore, [
@@ -215,8 +222,16 @@ export default {
       }
     },
   },
-
   methods: {
+    openDelModal(title, id) {
+      this.tempProduct.title = title;
+      this.tempProduct.id = id;
+      this.$refs.dModal.openDeleteModal();
+    },
+    deleteProduct(id) {
+      this.removeCartItem(id);
+      this.$refs.dModal.closeDeleteModal();
+    },
     ...mapActions(cartStore, [
       'getCart',
       'removeCartItem',
