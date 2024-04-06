@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg"
+    class="navbar navbar-expand-lg fixed-top"
     style="background-color: #504152; padding: 0.5rem 1rem"
   >
     <router-link
@@ -32,14 +32,7 @@
       <ul class="navbar-nav mx-auto">
         <li class="nav-item me-4">
           <router-link
-            v-if="isFrontView"
-            class="nav-link active"
-            style="color: #eae0d5; font-size: 18px"
-            to="/"
-            >Home</router-link
-          >
-          <router-link
-            v-else
+            v-if="!isFrontView"
             class="nav-link active"
             style="color: #eae0d5; font-size: 18px"
             to="/admin/products"
@@ -89,7 +82,7 @@
               ></i>
               <span
                 class="position-absolute top-0 start-100
-                translate-middle badge rounded-pill bg-danger"
+                 translate-middle badge rounded-pill bg-danger"
                 style="transform: translate(-50%, -50%)"
               >
                 {{ this.cart?.length }}
