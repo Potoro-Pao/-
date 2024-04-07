@@ -4,16 +4,8 @@
     style="background-color: #504152; padding: 0.5rem 1rem"
   >
     <router-link
-      v-if="isFrontView"
       class="navbar-brand p-2"
-      style="color: #f4f4f4; font-size: 24px"
-      to="/"
-      >Bookstore</router-link
-    >
-    <router-link
-      v-else
-      class="navbar-brand p-2"
-      style="color: #f4f4f4; font-size: 24px"
+      :style="{ color: isFrontView ? '#f4f4f4' : '#f4f4f4', fontSize: '24px' }"
       to="/"
       >Bookstore</router-link
     >
@@ -32,43 +24,36 @@
       <ul class="navbar-nav mx-auto">
         <li class="nav-item me-4">
           <router-link
-            v-if="!isFrontView"
-            class="nav-link active"
+            :to="isFrontView ? '/products' : '/admin/products'"
+            class="nav-link"
+            :class="{
+              'active-nav-link':
+                $route.path === '/products' ||
+                $route.path === '/admin/products',
+            }"
             style="color: #eae0d5; font-size: 18px"
-            to="/admin/products"
             >Products</router-link
           >
         </li>
-        <li class="nav-item me-4">
+        <li class="nav-item me-4" v-if="!isFrontView">
           <router-link
-            v-if="isFrontView"
-            class="nav-link"
-            style="color: #eae0d5; font-size: 18px"
-            to="/products"
-            >Products</router-link
-          >
-          <router-link
-            v-else
-            class="nav-link"
-            style="color: #eae0d5; font-size: 18px"
             to="/admin/order"
+            class="nav-link"
+            :class="{ 'active-nav-link': $route.path === '/admin/order' }"
+            style="color: #eae0d5; font-size: 18px"
             >Orders</router-link
           >
         </li>
         <li class="nav-item me-4">
           <router-link
-            v-if="isFrontView"
+            :to="isFrontView ? '/about' : '/admin/coupon'"
             class="nav-link"
+            :class="{
+              'active-nav-link':
+                $route.path === '/about' || $route.path === '/admin/coupon',
+            }"
             style="color: #eae0d5; font-size: 18px"
-            to="/about"
-            >About</router-link
-          >
-          <router-link
-            v-else
-            class="nav-link"
-            style="color: #eae0d5; font-size: 18px"
-            to="/admin/coupon"
-            >Coupon</router-link
+            >{{ isFrontView ? 'About' : 'Coupon' }}</router-link
           >
         </li>
       </ul>
@@ -77,16 +62,18 @@
           <router-link v-if="isFrontView" class="btn pe-5" to="/cart">
             <div class="position-relative">
               <i
-                style="color: #eae0d5; font-size: 24px"
-                class="bi bi-cart-fill"
+                :class="['bi', cart?.length > 0 ? 'bi-cart-fill' : 'bi-cart']"
+                :style="{
+                  color: '#eae0d5',
+                  fontSize: '24px',
+                }"
               ></i>
               <span
-                class="position-absolute top-0 start-100
-                 translate-middle badge rounded-pill bg-danger"
+                class="position-absolute
+                 top-0 start-100 translate-middle badge rounded-pill bg-danger"
                 style="transform: translate(-50%, -50%)"
               >
-                {{ this.cart?.length }}
-                <!-- 使用pinia的值 -->
+                {{ cart?.length }}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </div>
@@ -100,9 +87,8 @@
             to="/login"
             >Log in</router-link
           >
-          <!-- 登出按钮 -->
           <button
-            v-if="!isFrontView"
+            v-else
             class="nav-link btn"
             style="
               color: #eae0d5;
@@ -151,15 +137,29 @@ export default {
         });
     },
     clearCookies(name) {
-      document.cookie = `${name} =; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
     },
   },
   mounted() {
-    if (this.basePath === '#/') {
+    this.isFrontView = this.basePath === '#/';
+    if (this.isFrontView) {
       this.getCart();
-    } else {
-      this.isFrontView = false;
     }
   },
 };
 </script>
+
+<style>
+.nav-link:hover {
+  border-bottom: 3px solid #9c80a0;
+  padding-bottom: 5px;
+}
+
+.active-nav-link {
+  color: #9c80a0;
+  font-weight: bold;
+  border-bottom: 3px solid #9c80a0;
+  padding-bottom: 5px;
+}
+
+</style>
