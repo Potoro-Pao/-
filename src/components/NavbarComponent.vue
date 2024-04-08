@@ -21,6 +21,11 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul  v-if="isFrontView" class="navbar-nav">
+        <li class="nav-item">
+        <searchBarComponent></searchBarComponent>
+        </li>
+      </ul>
       <ul class="navbar-nav mx-auto">
         <li class="nav-item me-4">
           <router-link
@@ -109,6 +114,7 @@
 import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import cartStore from '../stores/cartStore';
+import searchBarComponent from './searchBarComponent.vue';
 
 const { VITE_URL } = import.meta.env;
 
@@ -118,6 +124,9 @@ export default {
     return {
       isFrontView: true,
     };
+  },
+  components: {
+    searchBarComponent,
   },
   computed: {
     ...mapState(cartStore, ['cart']),
@@ -161,5 +170,4 @@ export default {
   border-bottom: 3px solid #9c80a0;
   padding-bottom: 5px;
 }
-
 </style>

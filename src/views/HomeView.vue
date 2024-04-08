@@ -1,6 +1,6 @@
 <template>
   <HeaderC></HeaderC>
-  <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11; top: 65px !important;">
     <div
       id="copyToast"
       class="toast hide"
@@ -14,31 +14,6 @@
     </div>
   </div>
   <div class="container">
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-12">
-          <h2>Search Your Order</h2>
-          <div class="input-group my-3">
-            <input
-              v-model.trim="orderID"
-              type="text"
-              class="form-control me-3"
-              placeholder="Enter Order Number"
-              aria-label="Order Number"
-              aria-describedby="button-addon2"
-            />
-            <button
-              @click="getOrder"
-              class="btn btn-outline-secondary"
-              type="button"
-              id="button-addon2"
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-6">
@@ -249,12 +224,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import MapC from '../components/MapComponent.vue';
 import SwiperC from '../components/SwiperComponent.vue';
 import HeaderC from '../components/HeaderComponent.vue';
-
-const { VITE_URL, VITE_API } = import.meta.env;
 
 export default {
   data() {
@@ -269,37 +241,6 @@ export default {
     HeaderC,
   },
   methods: {
-    getOrder() {
-      const api = `${VITE_URL}/api/${VITE_API}/order/${this.orderID.trim()}`;
-      axios
-        .get(api)
-        .then((res) => {
-          this.isLoading = false;
-          // 正常情況
-          if (res.data.order && Object.keys(res.data.order).length > 0) {
-            this.checkoutData = res.data.order;
-            this.$router
-              .push({
-                path: '/checkorder',
-                query: {
-                  data: JSON.stringify(this.checkoutData),
-                },
-              })
-              .catch(() => {});
-          } else {
-            // 若返回空值(未找到訂單不可以跳轉)
-            this.showToast(
-              'Order not found. Please enter the correct Order Number.',
-              'bg-danger',
-            );
-          }
-        })
-        .catch(() => {
-          // 如果後端返回錯誤或網路錯誤
-          this.showToast('An error occurred. Please try again.', 'bg-danger');
-        });
-    },
-
     async copyToClipboard(text) {
       try {
         await navigator.clipboard.writeText(text);
@@ -309,7 +250,6 @@ export default {
         this.showToast('Failed to copy.', 'bg-danger');
       }
     },
-
     showToast(message, bgClass) {
       const toastElement = document.getElementById('copyToast');
       const toastBody = toastElement.querySelector('.toast-body');

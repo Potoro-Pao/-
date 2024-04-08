@@ -28,6 +28,17 @@
   z-index: -1;
 }
 
+.header-container .background::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5); /* 白色半透明背景 */
+  z-index: -1;
+}
+
 .link-content {
   display: flex;
   flex-direction: column;
