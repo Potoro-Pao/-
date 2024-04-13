@@ -1,5 +1,9 @@
 <template>
   <loading v-model:active="isLoading"></loading>
+  <div class="container my-5">
+    <stepperComponent :currentStep="1" />
+  </div>
+
   <div class="container mt-4">
     <div
       aria-live="polite"
@@ -185,6 +189,7 @@ import { Toast } from 'bootstrap';
 import Loading from 'vue-loading-overlay';
 import DDM from '../components/dashboardDelModal.vue';
 import cartStore from '../stores/cartStore';
+import stepperComponent from '../components/stepperComponent.vue';
 
 export default {
   data() {
@@ -200,6 +205,7 @@ export default {
   components: {
     Loading,
     DDM,
+    stepperComponent,
   },
   computed: {
     ...mapState(cartStore, [

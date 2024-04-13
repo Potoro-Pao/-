@@ -6,7 +6,9 @@
       :bgClass="type"
     ></toastComponent>
   </div>
-
+  <div class="container my-5">
+    <stepperComponent :currentStep="3" />
+  </div>
   <loading v-model:active="isLoading"></loading>
   <div class="container">
     <h1 class="text-center my-5">Confirm Your Payment</h1>
@@ -105,6 +107,7 @@ import { mapActions } from 'pinia';
 import mapStore from '../stores/mapStore';
 import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 import toastComponent from '../components/toastComponent.vue';
+import stepperComponent from '../components/stepperComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -130,6 +133,7 @@ export default {
   components: {
     Loading,
     toastComponent,
+    stepperComponent,
   },
   methods: {
     ...mapActions(mapStore, [
@@ -203,7 +207,6 @@ export default {
           this.isLoading = false;
           this.orders = res.data.order.products;
           this.userData = res.data.order.user;
-          console.log(this.userData.address);
           this.userCountryCity.country = JSON.parse(
             this.userData.address,
           )?.country;

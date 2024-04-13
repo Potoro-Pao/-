@@ -1,9 +1,13 @@
 <template>
   <loading v-model:active="isLoading"></loading>
-  <div class="container py-5">
+  <div class="container my-5">
+    <stepperComponent :currentStep="2" />
+  </div>
+
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <h1>Complete Your Information</h1>
+        <div class="container mb-5"><h1>Complete Your Information</h1></div>
         <VForm ref="orderForm" @submit="onSubmit" v-slot="{ errors }">
           <div class="mb-3">
             <label for="email">Email</label>
@@ -185,6 +189,7 @@ import axios from 'axios';
 import cartStore from '../stores/cartStore';
 import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 import en from '../en.json';
+import stepperComponent from '../components/stepperComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 defineRule('required', required);
@@ -203,6 +208,7 @@ export default {
     VField,
     ErrorMessage,
     Loading,
+    stepperComponent,
   },
   data() {
     return {
