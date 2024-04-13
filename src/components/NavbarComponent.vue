@@ -1,4 +1,7 @@
 <template>
+  <div class="toast-container">
+    <TC ref="TToast" :message="message" :bgClass="type"></TC>
+  </div>
   <nav
     class="navbar navbar-expand-lg fixed-top"
     style="background-color: #504152; padding: 0.5rem 1rem"
@@ -21,11 +24,12 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul  v-if="isFrontView" class="navbar-nav">
+      <ul v-if="isFrontView" class="navbar-nav mr-auto">
         <li class="nav-item">
-        <searchBarComponent></searchBarComponent>
+          <searchBarComponent @showFailedToast="handleShowToast"></searchBarComponent>
         </li>
       </ul>
+
       <ul class="navbar-nav mx-auto">
         <li class="nav-item me-4">
           <router-link
@@ -74,8 +78,8 @@
                 }"
               ></i>
               <span
-                class="position-absolute
-                 top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                class="position-absolute top-0
+                 start-100 translate-middle badge rounded-pill bg-danger"
                 style="transform: translate(-50%, -50%)"
               >
                 {{ cart?.length }}
@@ -115,6 +119,7 @@ import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import cartStore from '../stores/cartStore';
 import searchBarComponent from './searchBarComponent.vue';
+import TC from './toastComponent.vue';
 
 const { VITE_URL } = import.meta.env;
 
@@ -123,15 +128,24 @@ export default {
   data() {
     return {
       isFrontView: true,
+      message: '',
+      type: '',
     };
   },
   components: {
     searchBarComponent,
+    TC,
   },
   computed: {
     ...mapState(cartStore, ['cart']),
   },
   methods: {
+    handleShowToast(data) {
+      this.$emit('showFailedToast', data);
+      this.message = data.message;
+      this.type = data.bgClass;
+      this.$refs.TToast.showToast();
+    },
     ...mapActions(cartStore, ['getCart']),
     logOut() {
       const api = `${VITE_URL}/logout`;
@@ -141,8 +155,8 @@ export default {
           this.clearCookies('hexVueToken');
           this.$router.push('/login');
         })
-        .catch((error) => {
-          console.error('Logout failed:', error);
+        .catch(() => {
+          // console.error('Logout failed:', error);
         });
     },
     clearCookies(name) {
@@ -159,6 +173,19 @@ export default {
 </script>
 
 <style>
+.toast-container {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  z-index: 1050;
+  width: auto;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+}
 .nav-link:hover {
   border-bottom: 3px solid #9c80a0;
   padding-bottom: 5px;

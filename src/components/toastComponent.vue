@@ -1,14 +1,25 @@
-<!-- Toast.vue -->
 <template>
-  <div v-if="visible" :class="['toast', bgClass]" @click="hideToast">
-    <div class="toast-body">{{ message }}</div>
+  <div
+    ref="toastContainer"
+    class="toast"
+    :class="bgClass"
+    data-bs-autohide="false"
+  >
+    <div class="toast-body" :class="{ 'text-white': bgClass === 'bg-primary' }">
+      {{ message }}
+    </div>
   </div>
 </template>
 
 <script>
+import { Toast } from 'bootstrap';
+
 export default {
   props: {
-    message: String,
+    message: {
+      type: String,
+      required: true,
+    },
     bgClass: {
       type: String,
       default: 'bg-info',
@@ -16,59 +27,29 @@ export default {
   },
   data() {
     return {
-      visible: false,
+      toastInstance: null,
     };
+  },
+  mounted() {
+    this.toastInstance = new Toast(this.$refs.toastContainer);
   },
   methods: {
     showToast() {
-      this.visible = true;
+      this.toastInstance.show();
       setTimeout(() => {
-        this.visible = false;
-      }, 3000);
+        this.toastInstance.hide();
+      }, 2000);
     },
     hideToast() {
-      this.visible = false;
+      this.toastInstance.hide();
     },
   },
   watch: {
-    message: {
-      immediate: true,
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.showToast();
-        }
-      },
+    message(newVal) {
+      if (newVal && this.toastInstance) {
+        this.showToast();
+      }
     },
   },
 };
 </script>
-
-<style scoped>
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1050;
-  padding: 10px 20px;
-  border-radius: 5px;
-  color: white;
-  animation: slideIn 0.5s ease-out;
-}
-
-.bg-info {
-  background-color: #17a2b8;
-}
-
-/* Add more background color styles as needed */
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-</style>

@@ -1,17 +1,10 @@
 <template>
   <HeaderC></HeaderC>
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 11; top: 65px !important;">
-    <div
-      id="copyToast"
-      class="toast hide"
-      role="alert"
-      aria-live="assertive"
-      aria-atomic="true"
-    >
-      <div class="toast-body">
-        <!-- Message will be inserted here -->
-      </div>
-    </div>
+  <div
+    class="position-fixed top-0 end-0 p-3"
+    style="z-index: 11; top: 65px !important"
+  >
+  <TC ref="TToast" :message="ToastMessage" :bgClass="ToastType"></TC>
   </div>
   <div class="container">
     <div class="container mt-5">
@@ -227,52 +220,46 @@
 import MapC from '../components/MapComponent.vue';
 import SwiperC from '../components/SwiperComponent.vue';
 import HeaderC from '../components/HeaderComponent.vue';
+import TC from '../components/toastComponent.vue';
 
 export default {
   data() {
     return {
       orderID: '',
       checkoutData: '',
+      ToastMessage: '',
+      ToastType: '',
     };
   },
   components: {
+    TC,
     MapC,
     SwiperC,
     HeaderC,
   },
   methods: {
+    handleShowToast(data) {
+      this.ToastMessage = data.message;
+      this.ToastType = data.bgClass;
+    },
     async copyToClipboard(text) {
       try {
         await navigator.clipboard.writeText(text);
-        const type = text === 'Reading' ? 'bg-info' : 'bg-primary';
-        this.showToast(`${text} has been copied to clipboard!`, type);
+        this.ToastType = text === 'Reading' ? 'bg-info' : 'bg-primary';
+        this.ToastMessage = `${text} has been copied to clipboard!`;
+        this.$nextTick(() => {
+          if (this.$refs.TToast) {
+            this.$refs.TToast.showToast();
+          }
+        });
       } catch (err) {
-        this.showToast('Failed to copy.', 'bg-danger');
+        this.ToastType = 'bg-danger';
+        this.$nextTick(() => {
+          if (this.$refs.TToast) {
+            this.$refs.TToast.showToast();
+          }
+        });
       }
-    },
-    showToast(message, bgClass) {
-      const toastElement = document.getElementById('copyToast');
-      const toastBody = toastElement.querySelector('.toast-body');
-      toastBody.textContent = message;
-      toastElement.classList.remove(
-        'hide',
-        'bg-info',
-        'bg-primary',
-        'bg-danger',
-        'text-white',
-      );
-      toastElement.classList.add('show', bgClass);
-      if (bgClass === 'bg-primary') {
-        toastElement.classList.add('text-white');
-      }
-      if (bgClass === 'bg-danger') {
-        toastElement.classList.add('text-white');
-      }
-
-      setTimeout(() => {
-        toastElement.classList.remove('show', bgClass, 'text-white');
-        toastElement.classList.add('hide');
-      }, 3000);
     },
   },
 };

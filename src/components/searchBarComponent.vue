@@ -23,6 +23,7 @@
 import axios from 'axios';
 
 const { VITE_URL, VITE_API } = import.meta.env;
+
 export default {
   data() {
     return {
@@ -32,33 +33,48 @@ export default {
   },
   methods: {
     getOrder() {
+      console.log(this.orderID);
       const api = `${VITE_URL}/api/${VITE_API}/order/${this.orderID.trim()}`;
+      if (!this.orderID) {
+        this.$emit('showFailedToast', {
+          message: 'Order not found. Please enter the correct Order Number.',
+          bgClass: 'bg-danger',
+        });
+        return;
+      }
+
       axios
         .get(api)
         .then((res) => {
           this.isLoading = false;
-          // 正常情況
           if (res.data.order && Object.keys(res.data.order).length > 0) {
             this.checkoutData = res.data.order;
             this.$router
               .push({
                 path: '/checkorder',
-                query: {
-                  data: JSON.stringify(this.checkoutData),
-                },
+                query: { data: JSON.stringify(this.checkoutData) },
               })
-              .catch(() => {});
+              .catch(() => {
+                console.log('sldjfs');
+                this.$emit('showFailedToast', {
+                  message:
+                    'Order not found. Please enter the correct Order Number.',
+                  bgClass: 'bg-danger',
+                });
+              });
           } else {
-            // 若返回空值(未找到訂單不可以跳轉)
-            this.showToast(
-              'Order not found. Please enter the correct Order Number.',
-              'bg-danger',
-            );
+            this.$emit('showFailedToast', {
+              message:
+                'Order not found. Please enter the correct Order Number.',
+              bgClass: 'bg-danger',
+            });
           }
         })
         .catch(() => {
-          // 如果後端返回錯誤或網路錯誤
-          this.showToast('An error occurred. Please try again.', 'bg-danger');
+          this.$emit('showFailedToast', {
+            message: 'An error occurred. Please try again.',
+            bgClass: 'bg-danger',
+          });
         });
     },
   },
