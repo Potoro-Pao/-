@@ -1,8 +1,9 @@
 <template>
   <div class="container my-5">
     <div class="row">
-      <div class="col-lg-8">
-        <div class="card rounded-0">
+      <!-- Product Information and Checkout Card -->
+      <div class="col-lg-8 d-flex">
+        <div class="card rounded-0 flex-grow-1 mr-lg-2">
           <div class="row g-0">
             <div class="col-md-5">
               <img
@@ -13,33 +14,36 @@
             </div>
             <div class="col-md-7">
               <div class="card-body">
-                <h5 class="card-title">{{ product.title }}</h5>
+                <h5 class="card-title" style="font-weight: bold">
+                  {{ product.title }}
+                </h5>
                 <hr class="my-4" />
                 <p class="card-text">
                   <strong>Book Info</strong> <br /><br />
-                  Author: {{ this.format.author }}<br />
-                  ISBN: {{ this.format.ISBN }}<br />
-                  Pages: {{ this.format.pages }}<br />
-                  Publisher: {{ this.format.publisher }}<br />
+                  Author: {{ format.author }}<br />
+                  ISBN: {{ format.ISBN }}<br />
+                  Pages: {{ format.pages }}<br />
+                  Publisher: {{ format.publisher }}<br />
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <!-- Price & Checkout Card -->
-      <div class="col-lg-4">
-        <div class="card rounded-0">
+      <div class="col-lg-4 d-flex">
+        <div class="card rounded-0 flex-grow-1 ml-lg-2">
           <div class="card-body">
-            <h5 class="card-title">{{ product.price }}</h5>
+            <h5 class="card-title" style="color: green">
+              ${{ product.price }} NTD
+            </h5>
             <h5
               v-if="product.origin_price !== product.price"
-              class="card-title"
+              class="card-title text-muted"
+              style="color: red"
             >
-              <del>{{ product.origin_price }}</del>
+              <del>${{ product.origin_price }} NTD</del>
             </h5>
-            <p style="block">Free Delivery Worldwide</p>
-
+            <p>Free Delivery Worldwide</p>
             <div class="input-group mb-3">
               <button
                 class="btn btn-outline-secondary"
@@ -49,7 +53,13 @@
               >
                 -
               </button>
-              <input type="text" class="form-control" :value="qty" readonly />
+              <input
+                type="text"
+                class="form-control"
+                :value="qty"
+                readonly
+                style="text-align: center"
+              />
               <button
                 class="btn btn-outline-secondary"
                 @click="qty++"
@@ -60,8 +70,8 @@
             </div>
             <button
               type="button"
-              @click.prevent="addToCart(product.id, this.qty)"
-              class="btn btn-primary"
+              @click.prevent="addToCart(product.id, qty)"
+              class="btn btn-primary w-100 mt-9"
             >
               Add to Cart
             </button>
@@ -73,8 +83,8 @@
   <div class="container">
     <div class="row">
       <h3>Short Description</h3>
-      <!-- 只有当 product.content 存在时，才尝试渲染内容 -->
-      <div v-if="product.content">
+      <!-- Only render the content when it exists -->
+      <div v-if="product.content" class="col-md-8">
         <p
           class="card-text"
           style="line-height: 2; font-size: 1.125rem"
@@ -90,7 +100,8 @@
       </div>
       <p v-else>Loading description...</p>
     </div>
-    <div class="container">
+  </div>
+  <div class="container">
       <div class="row">
         <h3
           v-if="product.imagesUrl && product.imagesUrl.length > 0"
@@ -121,8 +132,8 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
+
 <script>
 import axios from 'axios';
 import { mapActions } from 'pinia';
@@ -135,7 +146,7 @@ export default {
     return {
       product: {},
       qty: 1,
-      showFullContent: false, // 控制内容展示状态的变量
+      showFullContent: false, // Control display state of content
       format: {
         author: '',
         ISBN: '',
@@ -145,18 +156,18 @@ export default {
     };
   },
   methods: {
-    formated(format) {
+    formatted(format) {
       this.format = JSON.parse(format);
     },
     toggleContent() {
-      this.showFullContent = !this.showFullContent; // 切换展示内容的状态
+      this.showFullContent = !this.showFullContent; // Toggle content display state
     },
     ...mapActions(cartStore, ['addToCart']),
     getProduct() {
       const { id } = this.$route.params;
       axios.get(`${VITE_URL}/api/${VITE_API}/product/${id}`).then((res) => {
         this.product = res.data.product;
-        this.formated(this.product.description);
+        this.formatted(this.product.description);
       });
     },
   },
