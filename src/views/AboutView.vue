@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container mt-5">
     <h1>About Books</h1>
     <br>
     <h2 style="font-weight:bold">Discover the Boundless World of Literature</h2>
-    <p style="font-size:30px;">
+    <p style="font-size:16px;">
       Welcome to Books, a haven crafted for lovers of
       literature.<br>
       We handpick classic and contemporary literary works from around the
