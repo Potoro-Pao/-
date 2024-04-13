@@ -1,4 +1,12 @@
 <template>
+  <div class="toast-container">
+    <toastComponent
+      ref="TToast"
+      :message="message"
+      :bgClass="type"
+    ></toastComponent>
+  </div>
+
   <loading v-model:active="isLoading"></loading>
   <div class="container">
     <h1 class="text-center my-5">Confirm Your Payment</h1>
@@ -32,18 +40,18 @@
         <div class="col-md-6" v-for="order in orders" :key="order.id">
           <div class="card">
             <img
-              :src="order.product.imageUrl"
+              :src="order.product?.imageUrl"
               class="card-img-top"
               alt="Product Image"
             />
             <div class="card-body">
               <h5 class="card-title">
-                {{ order.product.title }}
+                {{ order.product?.title }}
               </h5>
             </div>
             <div class="container">
-              <p class="card-text">Price: {{ order.product.price }}</p>
-              <p>Quantity: {{ order.qty }}</p>
+              <p class="card-text">Price: {{ order.product?.price }}</p>
+              <p>Quantity: {{ order?.qty }}</p>
             </div>
           </div>
         </div>
@@ -72,7 +80,7 @@
             <option>Pay when you get it (Cash on Delivery)</option>
           </select>
           <button
-          type="button"
+            type="button"
             class="btn btn-primary mt-3"
             :disabled="!selectedPaymentMethod"
             @click="confirmOrder"
@@ -96,12 +104,15 @@ import axios from 'axios';
 import { mapActions } from 'pinia';
 import mapStore from '../stores/mapStore';
 import confirmOrderDataStore from '../stores/confirmOrderDataStore';
+import toastComponent from '../components/toastComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
 export default {
   data() {
     return {
+      message: '',
+      type: '',
       is_paid: false,
       selectedPaymentMethod: '',
       isLoading: true,
@@ -118,6 +129,7 @@ export default {
   },
   components: {
     Loading,
+    toastComponent,
   },
   methods: {
     ...mapActions(mapStore, [
@@ -167,9 +179,17 @@ export default {
             this.ordersTotal = Math.round(order.total);
             this.orderID = order.id;
             this.userData = order.user;
-            this.userCountryCity.country = JSON.parse(this.userData.address).country;
+            this.userCountryCity.country = JSON.parse(
+              this.userData.address,
+            ).country;
             this.userCountryCity.city = JSON.parse(this.userData.address).city;
             this.userData.address = JSON.parse(this.userData.address).address;
+          } else {
+            this.orders = '';
+            this.ordersTotal = '';
+            this.orderID = '';
+            this.userData = '';
+            this.userCountryCity = '';
           }
         })
         .catch(() => {});
@@ -177,17 +197,27 @@ export default {
 
     searchOrder() {
       const api = `${VITE_URL}/api/${VITE_API}/order/${this.orderID}`;
-      axios.get(api).then((res) => {
-        this.isLoading = false;
-        this.orders = res.data.order.products;
-        this.userData = res.data.order.user;
-        this.userCountryCity.country = JSON.parse(this.userData.address).country;
-        this.userCountryCity.city = JSON.parse(this.userData.address).city;
-        this.userData.address = JSON.parse(this.orders.address).address;
-        this.ordersTotal = Math.round(res.data.order.total);
-        this.checkoutOrderID = res.data.order.id;
-        this.orderID = res.data.order.id;
-      });
+      axios
+        .get(api)
+        .then((res) => {
+          this.isLoading = false;
+          this.orders = res.data.order.products;
+          this.userData = res.data.order.user;
+          console.log(this.userData.address);
+          this.userCountryCity.country = JSON.parse(
+            this.userData.address,
+          )?.country;
+          this.userCountryCity.city = JSON.parse(this.userData.address).city;
+          this.userData.address = JSON.parse(this.userData.address).address;
+          this.ordersTotal = Math.round(res.data.order.total);
+          this.checkoutOrderID = res.data.order.id;
+          this.orderID = res.data.order.id;
+        })
+        .catch(() => {
+          this.type = 'bg-danger';
+          this.message = 'Something went wrong!';
+          this.$refs.TToast.showToast();
+        });
     },
   },
   created() {
@@ -197,11 +227,18 @@ export default {
     this.isLoading = false;
     this.checkoutOrderID = this.checkoutData.orderId || this.checkoutData.id;
     this.orderID = this.checkoutData.orderId || this.checkoutData.id;
+    if (!this.checkoutOrderID || !this.orderID) {
+      this.type = 'bg-danger';
+      this.message = 'Please enter the order number';
+      this.$refs.TToast.showToast();
+      return;
+    }
     this.getOrderAll();
   },
 };
 </script>
-
+.toast-container { position: fixed; top: 70px; right: 0; z-index: 1050; width:
+auto; padding: 1rem; pointer-events: none; } .toast { pointer-events: auto; }
 <style scoped>
 .card {
   max-height: 400px;

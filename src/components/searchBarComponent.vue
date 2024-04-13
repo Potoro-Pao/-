@@ -20,7 +20,10 @@
 </template>
 
 <script>
+
+import { mapActions } from 'pinia';
 import axios from 'axios';
+import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -32,30 +35,22 @@ export default {
     };
   },
   methods: {
+    ...mapActions(confirmOrderDataStore, ['storeData']),
     getOrder() {
-      console.log(this.orderID);
       const api = `${VITE_URL}/api/${VITE_API}/order/${this.orderID.trim()}`;
-      if (!this.orderID) {
-        this.$emit('showFailedToast', {
-          message: 'Order not found. Please enter the correct Order Number.',
-          bgClass: 'bg-danger',
-        });
-        return;
-      }
-
       axios
         .get(api)
         .then((res) => {
           this.isLoading = false;
           if (res.data.order && Object.keys(res.data.order).length > 0) {
             this.checkoutData = res.data.order;
+            this.storeData(this.checkoutData);
             this.$router
               .push({
                 path: '/checkorder',
                 query: { data: JSON.stringify(this.checkoutData) },
               })
               .catch(() => {
-                console.log('sldjfs');
                 this.$emit('showFailedToast', {
                   message:
                     'Order not found. Please enter the correct Order Number.',
