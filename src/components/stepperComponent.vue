@@ -40,7 +40,7 @@ export default {
 
 <style scoped>
 .stepper-container {
-  background-color: #3e2723; /* 較深棕色 */
+  background-color: #3e2723;
   padding: 20px;
   border-radius: 5px;
 }
@@ -62,7 +62,7 @@ export default {
 }
 
 .step-number {
-  background-color: #6d4c41; /* 中度棕色 */
+  background-color: #6d4c41;
   border-radius: 50%;
   width: 35px;
   height: 35px;
@@ -71,39 +71,39 @@ export default {
   justify-content: center;
   font-size: 16px;
   font-weight: bold;
-  color: #fff3e0; /* 淺棕色 */
+  color: #fff3e0;
   transition:
     background-color 0.3s,
     color 0.3s;
 }
 
 .step-title {
-  color: #fff3e0; /* 淺棕色 */
+  color: #fff3e0;
   font-size: 14px;
   margin-top: 8px;
 }
 
 .active .step-number {
-  background-color: #d7ccc8; /* 淺棕色 */
-  color: #3e2723; /* 較深棕色 */
+  background-color: #d7ccc8;
+  color: #3e2723;
 }
 
 .completed .step-number {
-  color: #fff3e0; /* 淺棕色 */
-  background-color: #6d4c41; /* 中度棕色 */
+  color: #fff3e0;
+  background-color: #6d4c41;
 }
 
 .step-line {
   height: 5px;
   width: 100%;
-  background-color: #6d4c41; /* 中度棕色 */
+  background-color: #6d4c41;
   position: absolute;
-  top: 18px; /* 調整到step-number的中間 */
+  top: 18px;
   left: 0;
   z-index: -1;
 }
 
 .completed .step-line {
-  background-color: #d7ccc8; /* 淺棕色 */
+  background-color: #d7ccc8;
 }
 </style>

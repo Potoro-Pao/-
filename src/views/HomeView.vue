@@ -1,4 +1,6 @@
 <template>
+  <Loading v-model:active="isLoading"></Loading>
+
   <HeaderComponent></HeaderComponent>
   <div
     class="position-fixed top-0 end-0 p-3"
@@ -16,7 +18,7 @@
     </div>
     <div class="container mt-5">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-5">
           <h2>Our latest Activity</h2>
           <SwiperComponent></SwiperComponent>
         </div>
@@ -25,7 +27,7 @@
           <MapComponent style="width: 100%; height: 400px"></MapComponent>
         </div>
       </div>
-      <div class="container mt-5">
+      <div class="container">
         <div class="row">
           <div class="col">
             <div class="row justify-content-center py-7">
@@ -223,6 +225,7 @@
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay';
 import MapComponent from '../components/MapComponent.vue';
 import SwiperComponent from '../components/SwiperComponent.vue';
 import HeaderComponent from '../components/HeaderComponent.vue';
@@ -236,6 +239,7 @@ export default {
       checkoutData: '',
       ToastMessage: '',
       ToastType: '',
+      isLoading: true,
     };
   },
   components: {
@@ -244,6 +248,7 @@ export default {
     SwiperComponent,
     HeaderComponent,
     BreadCrumbsComponent,
+    Loading,
   },
   methods: {
     handleShowToast(data) {
@@ -269,6 +274,9 @@ export default {
         });
       }
     },
+  },
+  mounted() {
+    this.isLoading = false;
   },
 };
 </script>
