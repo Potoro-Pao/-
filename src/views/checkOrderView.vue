@@ -12,10 +12,9 @@
   <loading v-model:active="isLoading"></loading>
   <div class="container">
     <h1 class="text-center my-5">Confirm Your Payment</h1>
-
     <div class="row">
       <div class="mb-3">
-        <label style="font-size: 20px" for="orderId" class="form-label mb-3"
+        <label for="orderId" style="font-size: 20px" class="form-label mb-3"
           >Order ID</label
         >
         <input
@@ -25,51 +24,76 @@
           v-model="checkoutOrderID"
           readonly
         />
-        <label style="font-size: 20px" for="orderId" class="form-label mb-3"
+        <label
+          for="searchOrderId"
+          style="font-size: 20px"
+          class="form-label mb-3"
           >Search Order ID</label
         >
         <input
           type="text"
           class="form-control"
-          id="orderId"
+          id="searchOrderId"
           v-model="orderID"
         />
         <button type="button" class="btn btn-primary mt-3" @click="searchOrder">
           Search
         </button>
       </div>
-      <div class="row">
-        <div class="col-md-6" v-for="order in orders" :key="order.id">
-          <div class="card">
-            <img
-              :src="order.product?.imageUrl"
-              class="card-img-top"
-              alt="Product Image"
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                {{ order.product?.title }}
-              </h5>
+      <div class="col-12">
+        <h5 class="mb-3">Your Orders</h5>
+        <div class="list-group">
+          <a
+            v-for="order in orders"
+            :key="order.id"
+            class="list-group-item list-group-item-action flex-column align-items-start"
+          >
+            <div class="d-flex w-100 justify-content-between">
+              <img
+                :src="order.product?.imageUrl"
+                alt="Product Image"
+                style="width: 100px; height: auto; margin-right: 15px"
+              />
+              <div class="flex-grow-1">
+                <h5 class="mb-3">{{ order.product?.title }}</h5>
+                <p class="mb-1">
+                  Item Price:
+                  <span class="text-muted"
+                    >${{ order.product?.price }} NTD</span
+                  >
+                </p>
+                <p
+                  class="mb-1 font-weight-bold text-primary"
+                  style="font-size: 1.25em"
+                >
+                Item Total: ${{ order.product?.price * order?.qty }} NTD
+                </p>
+              </div>
+              <small>Quantity: {{ order?.qty }}</small>
             </div>
-            <div class="container">
-              <p class="card-text">Price: {{ order.product?.price }}</p>
-              <p>Quantity: {{ order?.qty }}</p>
-            </div>
-          </div>
+          </a>
         </div>
       </div>
       <div class="container">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title"><strong>Customer Information </strong></h5>
+            <h5 class="card-title"><strong>Customer Information</strong></h5>
             <p class="card-text">Name: {{ this.userData.name }}</p>
             <p class="card-text">Email: {{ this.userData.email }}</p>
             <p class="card-text">Address: {{ this.userData.address }}</p>
             <p class="card-text">Phone: {{ this.userData.tel }}</p>
-            <p class="card-text text-success">Total: {{ this.ordersTotal }}</p>
+            <p
+              class="card-text font-weight-bold text-success"
+              style="font-size: 1.25em"
+            >
+              Total: ${{ this.ordersTotal }} NTD
+              <span v-if="hasCoupon" class="badge bg-success ml-2"
+                >Coupon Applied</span
+              >
+            </p>
           </div>
         </div>
-        <div class="mt-3" v-if="!this.is_paid">
+        <div v-if="!this.is_paid" class="mt-3">
           <label for="paymentMethod" class="form-label">Payment Methods</label>
           <select
             class="form-select"
@@ -114,6 +138,7 @@ const { VITE_URL, VITE_API } = import.meta.env;
 export default {
   data() {
     return {
+      hasCoupon: '',
       message: '',
       type: '',
       is_paid: false,
@@ -141,6 +166,10 @@ export default {
       'setBookPhotoFromExternal',
     ]),
     ...mapActions(confirmOrderDataStore, ['getOrderSuccessUserData']),
+    ...mapActions(mapStore, [
+      'setLocationFromExternal',
+      'setBookPhotoFromExternal',
+    ]),
 
     confirmOrder() {
       const api = `${VITE_URL}/api/${VITE_API}/pay/${this.orderID}`;
@@ -179,6 +208,7 @@ export default {
           );
 
           if (order) {
+            this.isLoading = false;
             this.orders = order.products;
             this.ordersTotal = Math.round(order.total);
             this.orderID = order.id;
@@ -188,6 +218,8 @@ export default {
             ).country;
             this.userCountryCity.city = JSON.parse(this.userData.address).city;
             this.userData.address = JSON.parse(this.userData.address).address;
+            const checkCoupon = Object.values(order.products);
+            this.hasCoupon = checkCoupon.some((o) => !!o.coupon);
           } else {
             this.orders = '';
             this.ordersTotal = '';
@@ -215,6 +247,8 @@ export default {
           this.ordersTotal = Math.round(res.data.order.total);
           this.checkoutOrderID = res.data.order.id;
           this.orderID = res.data.order.id;
+          const checkCoupon = Object.values(this.orders.products);
+          this.hasCoupon = checkCoupon.some((o) => !!o.coupon);
         })
         .catch(() => {
           this.type = 'bg-danger';
@@ -227,9 +261,9 @@ export default {
     this.checkoutData = this.getOrderSuccessUserData();
   },
   mounted() {
-    this.isLoading = false;
     this.checkoutOrderID = this.checkoutData.orderId || this.checkoutData.id;
     this.orderID = this.checkoutData.orderId || this.checkoutData.id;
+    localStorage.getItem(this.orderID);
     if (!this.checkoutOrderID || !this.orderID) {
       this.type = 'bg-danger';
       this.message = 'Please enter the order number';
@@ -240,11 +274,14 @@ export default {
   },
 };
 </script>
-.toast-container { position: fixed; top: 70px; right: 0; z-index: 1050; width:
-auto; padding: 1rem; pointer-events: none; } .toast { pointer-events: auto; }
+
 <style scoped>
 .card {
   max-height: 400px;
   overflow-y: auto;
+}
+.card:hover {
+  transform: none;
+  box-shadow: none;
 }
 </style>

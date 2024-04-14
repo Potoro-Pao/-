@@ -10,7 +10,7 @@
         <div class="container mb-5"><h1>Complete Your Information</h1></div>
         <VForm ref="orderForm" @submit="onSubmit" v-slot="{ errors }">
           <div class="mb-3">
-            <label for="email">Email</label>
+            <label for="email">Email <span class="text-danger">*</span></label>
             <VField
               id="email"
               name="email"
@@ -25,7 +25,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="name">Name</label>
+            <label for="name">Name <span class="text-danger">*</span></label>
             <VField
               id="name"
               name="name"
@@ -40,7 +40,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="phone">Telephone</label>
+            <label for="phone">Telephone <span class="text-danger">*</span></label>
             <VField
               id="phone"
               name="phone"
@@ -55,7 +55,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="country">Country</label>
+            <label for="country">Country <span class="text-danger">*</span></label>
             <VField
               id="country"
               name="country"
@@ -69,7 +69,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="city">City</label>
+            <label for="city">City <span class="text-danger">*</span></label>
             <VField
               id="city"
               name="city"
@@ -83,7 +83,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="address">Address</label>
+            <label for="address">Address <span class="text-danger">*</span></label>
             <VField
               id="address"
               name="address"
