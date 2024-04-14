@@ -1,5 +1,15 @@
 <template>
   <loading v-model:active="isLoading"></loading>
+  <div
+    class="position-fixed top-0 end-0 p-3"
+    style="z-index: 11; top: 65px !important"
+  >
+    <toastComponent
+      ref="TToast"
+      :message="message"
+      :bgClass="bgClass"
+    ></toastComponent>
+  </div>
   <div class="container my-5">
     <stepperComponent :currentStep="1" />
   </div>
@@ -131,7 +141,7 @@
           <input
             type="text"
             id="couponCode"
-            v-model="couponCode"
+            v-model.trim="couponCode"
             placeholder="Enter coupon code"
             class="form-control"
           />
@@ -190,10 +200,13 @@ import Loading from 'vue-loading-overlay';
 import DDM from '../components/dashboardDelModal.vue';
 import cartStore from '../stores/cartStore';
 import stepperComponent from '../components/stepperComponent.vue';
+import toastComponent from '../components/toastComponent.vue';
 
 export default {
   data() {
     return {
+      message: '',
+      bgClass: '',
       tempProduct: {},
       isLoading: this.loading,
       couponCode: '',
@@ -206,6 +219,7 @@ export default {
     Loading,
     DDM,
     stepperComponent,
+    toastComponent,
   },
   computed: {
     ...mapState(cartStore, [
@@ -213,7 +227,6 @@ export default {
       'final_total',
       'total',
       'discount',
-      'showToast',
       'refreshDiscount',
       'loading',
     ]),
@@ -221,11 +234,6 @@ export default {
   watch: {
     loading(n) {
       this.isLoading = n;
-    },
-    showToast(newVal) {
-      if (newVal === '已套用優惠券') {
-        this.onToastCalled();
-      }
     },
   },
   methods: {
@@ -243,34 +251,35 @@ export default {
       'removeCartItem',
       'changeCartQty',
       'applyDiscount',
-      'resetShowToast',
       'deleteCart',
     ]),
     applyCoupon() {
       if (this.cart.length === 0) {
-        this.onToastCalled();
+        this.bgClass = 'bg-danger';
+        this.message = 'Your shopping cart is empty';
+        this.$refs.TToast.showToast();
         return;
       }
       if (!this.couponCode) {
-        this.onToastCalled();
+        this.bgClass = 'bg-danger';
+        this.message = 'Please enter the coupon code';
+        this.$refs.TToast.showToast();
         return;
       }
-      this.applyDiscount(this.couponCode);
-    },
-    onToastCalled() {
-      if (this.showToast === '已套用優惠券') {
-        if (this.couponCode === 'Reading') {
-          this.toastClass = 'text-bg-info';
-        }
-        if (this.couponCode === 'Literature') {
-          this.toastClass = 'text-bg-primary';
-        }
-        this.toastBody.show();
-      } else {
-        this.toastClass = 'text-bg-danger';
-        this.invalidToast.show();
+      if (this.couponCode !== 'Reading' && this.couponCode !== 'Literature') {
+        this.bgClass = 'bg-danger';
+        this.message = 'Please enter the right coupon code';
+        this.$refs.TToast.showToast();
+        return;
       }
-      this.resetShowToast();
+      this.bgClass = this.couponCode === 'Reading' ? 'bg-info' : 'bg-primary';
+      this.message = `${this.couponCode} has been copied to clipboard!`;
+      this.$nextTick(() => {
+        if (this.$refs.TToast) {
+          this.$refs.TToast.showToast();
+        }
+      });
+      this.applyDiscount(this.couponCode);
     },
     removeAllItems() {
       this.isLoading = this.loading;
@@ -283,11 +292,6 @@ export default {
     const invalidToastElement = this.$refs.invalidToast;
     this.toastBody = new Toast(toastElement);
     this.invalidToast = new Toast(invalidToastElement);
-    this.$watch('showToast', (newVal) => {
-      if (newVal) {
-        this.onToastCalled();
-      }
-    });
   },
 };
 </script>

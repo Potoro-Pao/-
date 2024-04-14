@@ -1,7 +1,7 @@
 <template>
   <loading v-model:active="isLoading"></loading>
 
-  <div class="success-container">
+  <div class="success-container container-fluid">
     <div class="success-content">
       <div class="success-message">
         <h1>Payment Successful!</h1>

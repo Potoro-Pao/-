@@ -87,7 +87,7 @@
               style="font-size: 1.25em"
             >
               Total: ${{ this.ordersTotal }} NTD
-              <span v-if="hasCoupon" class="badge bg-success ml-2"
+              <span v-if="hasCoupon" class="badge bg-success ml-3"
                 >Coupon Applied</span
               >
             </p>
@@ -263,7 +263,6 @@ export default {
   mounted() {
     this.checkoutOrderID = this.checkoutData.orderId || this.checkoutData.id;
     this.orderID = this.checkoutData.orderId || this.checkoutData.id;
-    localStorage.getItem(this.orderID);
     if (!this.checkoutOrderID || !this.orderID) {
       this.type = 'bg-danger';
       this.message = 'Please enter the order number';

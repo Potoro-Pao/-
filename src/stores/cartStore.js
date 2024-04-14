@@ -21,7 +21,7 @@ export default defineStore('cartStore', {
         this.cart = res.data.data.carts;
         this.final_total = Math.floor(res.data.data.final_total);
         this.total = res.data.data.total;
-        this.discount = this.final_total - this.total;
+        this.discount = this.total - this.final_total;
         // 不這樣寫的話，就算已使用優惠券也顯示不出來
       });
     },
@@ -66,9 +66,6 @@ export default defineStore('cartStore', {
       this.getCart();
     },
 
-    resetShowToast() {
-      this.showToast = '';
-    },
     applyDiscount(couponCode) {
       const couponCodeData = {
         data: {
@@ -82,10 +79,9 @@ export default defineStore('cartStore', {
         .then((res) => {
           this.final_total = Math.floor(res.data.data.final_total);
           this.discount = Math.floor(Math.abs(this.final_total - this.total));
-          this.showToast = '已套用優惠券';
         })
         .catch(() => {
-          this.showToast = +Math.random();
+          //
         });
     },
   },

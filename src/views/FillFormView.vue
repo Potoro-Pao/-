@@ -212,7 +212,7 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
+      isLoading: true,
       orderModal: null,
       user: {
         email: '',
@@ -311,6 +311,7 @@ export default {
   },
   mounted() {
     this.orderModal = new Modal(this.$refs.orderModal);
+    this.isLoading = false;
   },
 };
 </script>
