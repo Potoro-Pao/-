@@ -1,7 +1,7 @@
 <template>
   <loading v-model:active="isLoading"></loading>
   <div class="container my-5">
-    <stepperComponent :currentStep="2" />
+    <StepperComponent :currentStep="2" />
   </div>
 
   <div class="container">
@@ -189,7 +189,7 @@ import axios from 'axios';
 import cartStore from '../stores/cartStore';
 import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 import en from '../en.json';
-import stepperComponent from '../components/stepperComponent.vue';
+import StepperComponent from '../components/StepperComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 defineRule('required', required);
@@ -199,7 +199,7 @@ configure({
   generateMessage: localize({
     en: en.messages,
   }),
-  validateOnInput: true, // 输入时验证
+  validateOnInput: true,
 });
 
 export default {
@@ -208,7 +208,7 @@ export default {
     VField,
     ErrorMessage,
     Loading,
-    stepperComponent,
+    StepperComponent,
   },
   data() {
     return {

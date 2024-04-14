@@ -11,7 +11,7 @@
     ></ToastComponent>
   </div>
   <div class="container my-5">
-    <stepperComponent :currentStep="1" />
+    <StepperComponent :currentStep="1" />
   </div>
 
   <div class="container mt-4">
@@ -199,7 +199,7 @@ import { Toast } from 'bootstrap';
 import Loading from 'vue-loading-overlay';
 import DashboardDelModal from '../components/DashboardDelModal.vue';
 import cartStore from '../stores/cartStore';
-import stepperComponent from '../components/stepperComponent.vue';
+import StepperComponent from '../components/StepperComponent.vue';
 import ToastComponent from '../components/ToastComponent.vue';
 
 export default {
@@ -218,7 +218,7 @@ export default {
   components: {
     Loading,
     DashboardDelModal,
-    stepperComponent,
+    StepperComponent,
     ToastComponent,
   },
   computed: {

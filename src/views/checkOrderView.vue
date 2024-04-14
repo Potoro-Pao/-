@@ -7,7 +7,7 @@
     ></ToastComponent>
   </div>
   <div class="container my-5">
-    <stepperComponent :currentStep="3" />
+    <StepperComponent :currentStep="3" />
   </div>
   <loading v-model:active="isLoading"></loading>
   <div class="container">
@@ -131,7 +131,7 @@ import { mapActions } from 'pinia';
 import mapStore from '../stores/mapStore';
 import confirmOrderDataStore from '../stores/confirmOrderDataStore';
 import ToastComponent from '../components/ToastComponent.vue';
-import stepperComponent from '../components/stepperComponent.vue';
+import StepperComponent from '../components/StepperComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -158,7 +158,7 @@ export default {
   components: {
     Loading,
     ToastComponent,
-    stepperComponent,
+    StepperComponent,
   },
   methods: {
     ...mapActions(mapStore, [
