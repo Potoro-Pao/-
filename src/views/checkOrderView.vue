@@ -1,10 +1,10 @@
 <template>
   <div class="toast-container">
-    <toastComponent
+    <ToastComponent
       ref="TToast"
       :message="message"
       :bgClass="type"
-    ></toastComponent>
+    ></ToastComponent>
   </div>
   <div class="container my-5">
     <stepperComponent :currentStep="3" />
@@ -66,7 +66,7 @@
                   class="mb-1 font-weight-bold text-primary"
                   style="font-size: 1.25em"
                 >
-                Item Total: ${{ order.product?.price * order?.qty }} NTD
+                  Item Total: ${{ order.product?.price * order?.qty }} NTD
                 </p>
               </div>
               <small>Quantity: {{ order?.qty }}</small>
@@ -130,7 +130,7 @@ import axios from 'axios';
 import { mapActions } from 'pinia';
 import mapStore from '../stores/mapStore';
 import confirmOrderDataStore from '../stores/confirmOrderDataStore';
-import toastComponent from '../components/toastComponent.vue';
+import ToastComponent from '../components/ToastComponent.vue';
 import stepperComponent from '../components/stepperComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
@@ -157,7 +157,7 @@ export default {
   },
   components: {
     Loading,
-    toastComponent,
+    ToastComponent,
     stepperComponent,
   },
   methods: {
@@ -232,6 +232,15 @@ export default {
     },
 
     searchOrder() {
+      this.isLoading = true;
+      if (!this.orderID) {
+        this.type = 'bg-danger';
+        this.message = 'Please Enter the order Number';
+        this.$refs.TToast.showToast();
+        this.isLoading = false;
+        return;
+      }
+
       const api = `${VITE_URL}/api/${VITE_API}/order/${this.orderID}`;
       axios
         .get(api)
@@ -247,12 +256,20 @@ export default {
           this.ordersTotal = Math.round(res.data.order.total);
           this.checkoutOrderID = res.data.order.id;
           this.orderID = res.data.order.id;
-          const checkCoupon = Object.values(this.orders.products);
-          this.hasCoupon = checkCoupon.some((o) => !!o.coupon);
+          // const checkCoupon = Object.values(this.orders.products);
+          // this.hasCoupon = checkCoupon.some((o) => !!o.coupon);
+          if (this.orders && typeof this.orders === 'object') {
+            this.hasCoupon = Object.values(this.orders).some(
+              (product) => product.coupon,
+            );
+          } else {
+            this.hasCoupon = false;
+          }
         })
         .catch(() => {
+          this.isLoading = false;
           this.type = 'bg-danger';
-          this.message = 'Something went wrong!';
+          this.message = 'Please enter the correct order number';
           this.$refs.TToast.showToast();
         });
     },
@@ -267,6 +284,7 @@ export default {
       this.type = 'bg-danger';
       this.message = 'Please enter the order number';
       this.$refs.TToast.showToast();
+      this.isLoading = false;
       return;
     }
     this.getOrderAll();

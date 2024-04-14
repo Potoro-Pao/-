@@ -4,11 +4,11 @@
     class="position-fixed top-0 end-0 p-3"
     style="z-index: 11; top: 65px !important"
   >
-    <toastComponent
+    <ToastComponent
       ref="TToast"
       :message="message"
       :bgClass="bgClass"
-    ></toastComponent>
+    ></ToastComponent>
   </div>
   <div class="container my-5">
     <stepperComponent :currentStep="1" />
@@ -186,21 +186,21 @@
       </div>
     </div>
   </div>
-  <DDM
+  <DashboardDelModal
     :temp-product="tempProduct"
     :delete-product="() => deleteProduct(tempProduct.id)"
     ref="dModal"
-  ></DDM>
+  ></DashboardDelModal>
 </template>
 
 <script>
 import { mapActions, mapState } from 'pinia';
 import { Toast } from 'bootstrap';
 import Loading from 'vue-loading-overlay';
-import DDM from '../components/dashboardDelModal.vue';
+import DashboardDelModal from '../components/DashboardDelModal.vue';
 import cartStore from '../stores/cartStore';
 import stepperComponent from '../components/stepperComponent.vue';
-import toastComponent from '../components/toastComponent.vue';
+import ToastComponent from '../components/ToastComponent.vue';
 
 export default {
   data() {
@@ -217,9 +217,9 @@ export default {
   },
   components: {
     Loading,
-    DDM,
+    DashboardDelModal,
     stepperComponent,
-    toastComponent,
+    ToastComponent,
   },
   computed: {
     ...mapState(cartStore, [

@@ -1,10 +1,10 @@
 <template>
-  <HeaderC></HeaderC>
+  <HeaderComponent></HeaderComponent>
   <div
     class="position-fixed top-0 end-0 p-3"
     style="z-index: 11; top: 65px !important"
   >
-    <TC ref="TToast" :message="ToastMessage" :bgClass="ToastType"></TC>
+    <ToastComponent ref="TToast" :message="ToastMessage" :bgClass="ToastType"></ToastComponent>
   </div>
   <div class="container">
     <div class="container mt-5">
@@ -18,11 +18,11 @@
       <div class="row">
         <div class="col-md-6">
           <h2>Our latest Activity</h2>
-          <SwiperC></SwiperC>
+          <SwiperComponent></SwiperComponent>
         </div>
         <div class="col-md-6">
           <h2>Watch People Shop</h2>
-          <MapC style="width: 100%; height: 400px"></MapC>
+          <MapComponent style="width: 100%; height: 400px"></MapComponent>
         </div>
       </div>
       <div class="container mt-5">
@@ -223,10 +223,10 @@
 </template>
 
 <script>
-import MapC from '../components/MapComponent.vue';
-import SwiperC from '../components/SwiperComponent.vue';
-import HeaderC from '../components/HeaderComponent.vue';
-import TC from '../components/toastComponent.vue';
+import MapComponent from '../components/MapComponent.vue';
+import SwiperComponent from '../components/SwiperComponent.vue';
+import HeaderComponent from '../components/HeaderComponent.vue';
+import ToastComponent from '../components/ToastComponent.vue';
 import BreadCrumbsComponent from '../components/BreadCrumbsComponent.vue';
 
 export default {
@@ -239,10 +239,10 @@ export default {
     };
   },
   components: {
-    TC,
-    MapC,
-    SwiperC,
-    HeaderC,
+    ToastComponent,
+    MapComponent,
+    SwiperComponent,
+    HeaderComponent,
     BreadCrumbsComponent,
   },
   methods: {

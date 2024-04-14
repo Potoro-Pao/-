@@ -1,6 +1,6 @@
 <template>
   <div class="toast-container">
-    <TC ref="TToast" :message="message" :bgClass="type"></TC>
+    <ToastComponent ref="TToast" :message="message" :bgClass="type"></ToastComponent>
   </div>
   <nav
     class="navbar navbar-expand-lg fixed-top"
@@ -26,7 +26,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul v-if="isFrontView" class="navbar-nav mr-auto">
         <li class="nav-item">
-          <searchBarComponent @showFailedToast="handleShowToast"></searchBarComponent>
+          <SearchBarComponent @showFailedToast="handleShowToast"></SearchBarComponent>
         </li>
       </ul>
 
@@ -118,8 +118,8 @@
 import axios from 'axios';
 import { mapActions, mapState } from 'pinia';
 import cartStore from '../stores/cartStore';
-import searchBarComponent from './searchBarComponent.vue';
-import TC from './toastComponent.vue';
+import SearchBarComponent from './SearchBarComponent.vue';
+import ToastComponent from './ToastComponent.vue';
 
 const { VITE_URL } = import.meta.env;
 
@@ -133,8 +133,8 @@ export default {
     };
   },
   components: {
-    searchBarComponent,
-    TC,
+    SearchBarComponent,
+    ToastComponent,
   },
   computed: {
     ...mapState(cartStore, ['cart']),

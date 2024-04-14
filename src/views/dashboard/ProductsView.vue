@@ -69,23 +69,23 @@
     <PagC :pages="pages" :getProduct="getProduct" basePath="/admin" />
   </div>
   <!-- Modal components -->
-  <DPM
+  <DashboardProModal
     :temp-product="tempProduct"
     :update-product="updateProduct"
     ref="pModal"
-  ></DPM>
-  <DDM
+  ></DashboardProModal>
+  <DashboardDelModal
     :temp-product="tempProduct"
     :delete-product="deleteProduct"
     ref="dModal"
-  ></DDM>
+  ></DashboardDelModal>
 </template>
 
 <script>
 import axios from 'axios';
-import DDM from '../../components/dashboardDelModal.vue';
+import DashboardDelModal from '../../components/DashboardDelModal.vue';
 import PagC from '../../components/PaginationComponent.vue';
-import DPM from '../../components/dashboardProModal.vue';
+import DashboardProModal from '../../components/DashboardProModal.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -154,7 +154,7 @@ export default {
       });
     },
   },
-  components: { PagC, DPM, DDM },
+  components: { PagC, DashboardProModal, DashboardDelModal },
   mounted() {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)hexVueToken\s*=\s*([^;]*).*$)|^.*$/,

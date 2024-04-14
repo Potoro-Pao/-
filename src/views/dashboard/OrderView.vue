@@ -50,26 +50,26 @@
         </tbody>
       </table>
     </div>
-    <PagC :pages="pages" :getProduct="getOrders" basePath="/admin" />
+    <PaginationComponent :pages="pages" :getProduct="getOrders" basePath="/admin" />
   </div>
-  <DOM
+  <DashboardOrderModal
     :temp-product="tempProduct"
     :selected-order="selectedOrder"
     :update-product="updateProduct"
     ref="dOrderModal"
-  ></DOM>
-  <DDM
+  ></DashboardOrderModal>
+  <DashboardDelModal
     :selected-order="selectedOrder"
     :delete-product="deleteOrder"
     ref="dModal"
-  ></DDM>
+  ></DashboardDelModal>
 </template>
 <script>
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
-import DDM from '../../components/dashboardDelModal.vue';
-import DOM from '../../components/dashboardOrderModal.vue';
-import PagC from '../../components/PaginationComponent.vue';
+import DashboardDelModal from '../../components/DashboardDelModal.vue';
+import DashboardOrderModal from '../../components/DashboardOrderModal.vue';
+import PaginationComponent from '../../components/PaginationComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 export default {
@@ -92,9 +92,9 @@ export default {
     };
   },
   components: {
-    DDM,
-    DOM,
-    PagC,
+    DashboardDelModal,
+    DashboardOrderModal,
+    PaginationComponent,
     Loading,
   },
   methods: {
