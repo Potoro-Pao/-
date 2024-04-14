@@ -2,7 +2,7 @@
   <loading v-model:active="isLoading"></loading>
   <div class="container mt-5">
     <div class="container mt-5">
-      <breadCrumbsComponent :breadcrumbs="breadcrumbs"></breadCrumbsComponent>
+      <BreadCrumbsComponent :breadcrumbs="breadcrumbs"></BreadCrumbsComponent>
     </div>
     <h2>Categories</h2>
     <div class="row my-4">
@@ -62,7 +62,7 @@ import axios from 'axios';
 import { mapActions } from 'pinia';
 import cartStore from '../stores/cartStore';
 import pagC from '../components/PaginationComponent.vue';
-import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
+import BreadCrumbsComponent from '../components/BreadCrumbsComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -70,7 +70,7 @@ export default {
   components: {
     Loading,
     pagC,
-    breadCrumbsComponent,
+    BreadCrumbsComponent,
   },
   data() {
     return {

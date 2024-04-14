@@ -1,7 +1,10 @@
 <template>
   <loading v-model:active="isLoading"></loading>
   <div class="container my-5">
-    <breadCrumbsComponent :breadcrumbs="breadcrumbs"></breadCrumbsComponent>
+    <BreadCrumbsComponent
+      v-if="this.category !== 'Default Category'"
+      :breadcrumbs="breadcrumbs"
+    ></BreadCrumbsComponent>
     <div class="row">
       <!-- Product Information and Checkout Card -->
       <div class="col-lg-8 d-flex">
@@ -138,14 +141,14 @@ import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import { mapActions } from 'pinia';
 import cartStore from '../stores/cartStore';
-import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
+import BreadCrumbsComponent from '../components/BreadCrumbsComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
 export default {
   components: {
     Loading,
-    breadCrumbsComponent,
+    BreadCrumbsComponent,
   },
   data() {
     return {

@@ -9,9 +9,9 @@
   <div class="container">
     <div class="container mt-5">
       <div class="row">
-        <breadCrumbsComponent
+        <BreadCrumbsComponent
           :breadcrumbs="[{ path: '/', title: 'Home' }]"
-        ></breadCrumbsComponent>
+        ></BreadCrumbsComponent>
       </div>
     </div>
     <div class="container mt-5">
@@ -227,7 +227,7 @@ import MapC from '../components/MapComponent.vue';
 import SwiperC from '../components/SwiperComponent.vue';
 import HeaderC from '../components/HeaderComponent.vue';
 import TC from '../components/toastComponent.vue';
-import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
+import BreadCrumbsComponent from '../components/BreadCrumbsComponent.vue';
 
 export default {
   data() {
@@ -243,7 +243,7 @@ export default {
     MapC,
     SwiperC,
     HeaderC,
-    breadCrumbsComponent,
+    BreadCrumbsComponent,
   },
   methods: {
     handleShowToast(data) {

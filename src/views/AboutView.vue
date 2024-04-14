@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="container mt-5">
-      <breadCrumbsComponent
+      <BreadCrumbsComponent
         :breadcrumbs="[
           { path: '/', title: 'Home' },
           { path: '/about', title: 'About' },
         ]"
-      ></breadCrumbsComponent>
+      ></BreadCrumbsComponent>
       <h1>About Books</h1>
       <br />
       <h2 style="font-weight: bold">
@@ -44,11 +44,11 @@
 </template>
 
 <script>
-import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
+import BreadCrumbsComponent from '../components/BreadCrumbsComponent.vue';
 
 export default {
   components: {
-    breadCrumbsComponent,
+    BreadCrumbsComponent,
   },
 };
 </script>
