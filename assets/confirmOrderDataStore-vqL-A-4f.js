@@ -1,0 +1,1 @@
+import{U as t}from"./index-Kc8cdeaF.js";const e=t("userDataStore",{state:()=>({orderData:{}}),actions:{storeData(r){this.orderData=r},getOrderSuccessUserData(){return this.orderData}}});export{e as c};

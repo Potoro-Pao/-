@@ -1,0 +1,1 @@
+import{_ as t,o as c,c as n,e}from"./index-Kc8cdeaF.js";const o={},s={class:"container"},r=e("div",{class:"centered-content mt-7"},[e("h1",null,"Under Repairment...")],-1),a=[r];function _(d,i){return c(),n("div",s,a)}const f=t(o,[["render",_]]);export{f as default};
