@@ -14,8 +14,10 @@ export default defineStore('cartStore', {
   }),
   actions: {
     getCart() {
+      this.loading = true;
       const api = `${VITE_URL}/api/${VITE_API}/cart`;
       axios.get(api).then((res) => {
+        this.loading = false;
         this.cart = res.data.data.carts;
         this.final_total = Math.floor(res.data.data.final_total);
         this.total = res.data.data.total;

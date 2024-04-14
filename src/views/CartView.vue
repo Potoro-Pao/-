@@ -195,7 +195,7 @@ export default {
   data() {
     return {
       tempProduct: {},
-      isLoading: false,
+      isLoading: this.loading,
       couponCode: '',
       toastBody: null,
       toastClass: '',

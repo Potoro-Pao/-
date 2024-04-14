@@ -1,4 +1,5 @@
 <template>
+  <loading v-model:active="isLoading"></loading>
   <div class="container my-5">
     <div class="row">
       <!-- Product Information and Checkout Card -->
@@ -123,7 +124,7 @@
                 <img
                   :src="image"
                   class="img-fluid"
-                  style="height: 500px; width: 100%; object-fit: cover"
+                  style="height: 100%; width: 100%; object-fit: cover"
                   alt="Product Image"
                 />
               </div>
@@ -136,14 +137,19 @@
 
 <script>
 import axios from 'axios';
+import Loading from 'vue-loading-overlay';
 import { mapActions } from 'pinia';
 import cartStore from '../stores/cartStore';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
 export default {
+  components: {
+    Loading,
+  },
   data() {
     return {
+      isLoading: true,
       product: {},
       qty: 1,
       showFullContent: false, // Control display state of content
@@ -166,6 +172,7 @@ export default {
     getProduct() {
       const { id } = this.$route.params;
       axios.get(`${VITE_URL}/api/${VITE_API}/product/${id}`).then((res) => {
+        this.isLoading = false;
         this.product = res.data.product;
         this.formatted(this.product.description);
       });
@@ -176,3 +183,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.card:hover {
+  transform: none;
+  box-shadow: none;
+}
+</style>
