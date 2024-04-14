@@ -162,6 +162,7 @@ export default {
       const baseCrumbs = [
         { path: '/', title: 'Home' },
         { path: '/products', title: 'Products' },
+        { path: `/products?categories=${this.category}`, title: this.category },
         { path: '', title: 'Product Details' },
       ];
       return baseCrumbs;
