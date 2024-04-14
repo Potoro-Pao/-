@@ -1,5 +1,5 @@
 <template>
-  <loading v-model:active="isLoading"></loading>
+  <Loading v-model:active="isLoading"></Loading>
   <div class="container my-5">
     <StepperComponent :currentStep="2" />
   </div>

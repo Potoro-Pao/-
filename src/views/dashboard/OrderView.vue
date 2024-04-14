@@ -75,7 +75,7 @@ const { VITE_URL, VITE_API } = import.meta.env;
 export default {
   data() {
     return {
-      isLoading: false,
+      isLoading: true,
       orders: [],
       modal: null,
       selectedOrder: {
@@ -114,18 +114,22 @@ export default {
       this.$refs.dModal.openDeleteModal();
     },
     deleteOrder() {
+      this.isLoading = true;
       const api = `${VITE_URL}/api/${VITE_API}/admin/order/${this.tempProduct.id}`;
       axios
         .delete(api)
         .then(() => {
+          this.isLoading = false;
           this.getOrders(); // Refresh the orders list
           this.$refs.dModal.closeDeleteModal(); // Close the DDM modal after successful deletion
         })
         .catch(() => {});
     },
     getOrders(page = 1) {
+      this.isLoading = true;
       const api = `${VITE_URL}/api/${VITE_API}/admin/orders?page=${page}`;
       axios.get(api).then((res) => {
+        this.isLoading = false;
         this.orders = res.data.orders;
         this.pages = res.data.pagination;
       });
@@ -139,10 +143,12 @@ export default {
     },
 
     updateProduct() {
+      this.isLoading = true;
       const api = `${VITE_URL}/api/${VITE_API}/admin/order/${this.selectedOrder.id}`;
       axios
         .put(api, { data: this.selectedOrder })
         .then((res) => {
+          this.isLoading = false;
           this.products = res.data.products;
           this.getOrders();
           this.$refs.dOrderModal.closeModal();

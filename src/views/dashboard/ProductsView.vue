@@ -1,4 +1,5 @@
 <template>
+  <Loading v-model:active="isLoading"></Loading>
   <div class="container">
     <div class="text-end mt-4">
       <button type="button" class="btn btn-primary" @click="openModal('new')">
@@ -66,7 +67,11 @@
         </tbody>
       </table>
     </div>
-    <PaginationComponent :pages="pages" :getProduct="getProduct" basePath="/admin" />
+    <PaginationComponent
+      :pages="pages"
+      :getProduct="getProduct"
+      basePath="/admin"
+    />
   </div>
   <!-- Modal components -->
   <DashboardProModal
@@ -86,12 +91,14 @@ import axios from 'axios';
 import DashboardDelModal from '@/components/DashboardDelModal.vue';
 import PaginationComponent from '@/components/PaginationComponent.vue';
 import DashboardProModal from '@/components/DashboardProModal.vue';
+import Loading from 'vue-loading-overlay';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
 export default {
   data() {
     return {
+      isLoading: true,
       products: [],
       tempProduct: {
         imagesUrl: [],
@@ -104,8 +111,10 @@ export default {
   },
   methods: {
     getProduct(page = 1) {
+      this.isLoading = true;
       const api = `${VITE_URL}/api/${VITE_API}/admin/products?page=${page}`;
       axios.get(api).then((res) => {
+        this.isLoading = false;
         this.products = res.data.products;
         this.pages = res.data.pagination;
       });
@@ -128,6 +137,7 @@ export default {
       }
     },
     updateProduct() {
+      this.isLoading = true;
       let api = `${VITE_URL}/api/${VITE_API}/admin/product`;
       let method = 'post';
       if (!this.isNew) {
@@ -136,6 +146,7 @@ export default {
       }
       axios[method](api, { data: this.tempProduct })
         .then((res) => {
+          this.isLoading = false;
           this.products = res.data.products;
           this.getProduct();
           this.$refs.pModal.closeModal();
@@ -143,8 +154,10 @@ export default {
         .catch(() => {});
     },
     deleteProduct() {
+      this.isLoading = true;
       const api = `${VITE_URL}/api/${VITE_API}/admin/product/${this.tempProduct.id}`;
       axios.delete(api, { data: this.tempProduct }).then((res) => {
+        this.isLoading = false;
         this.products = res.data.products;
         this.getProduct();
         this.$refs.dModal.closeDeleteModal();
@@ -154,7 +167,12 @@ export default {
       });
     },
   },
-  components: { PaginationComponent, DashboardProModal, DashboardDelModal },
+  components: {
+    PaginationComponent,
+    DashboardProModal,
+    DashboardDelModal,
+    Loading,
+  },
   mounted() {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)hexVueToken\s*=\s*([^;]*).*$)|^.*$/,
