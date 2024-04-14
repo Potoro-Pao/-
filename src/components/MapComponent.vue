@@ -86,7 +86,7 @@ export default {
           const popupContent = `
                             <div style="display: flex; align-items: center;">
                             <div style="flex: 1;">
-                            <img src="${this.bookPhoto}" alt="Image" style="width: 100px; height: auto;">
+                            <img src="${this.bookPhoto}" alt="BookImage on Map" style="width: 100px; height: auto;">
                             </div>
                             <div style="flex: 2; margin-left: 10px;">
                             <p>SomeOne from ${this.city}, ${this.country} <br> bought <strong>${this.bookTitle}</strong> with free delivery</p>
@@ -103,7 +103,7 @@ export default {
       const popupContent = `
                             <div style="display: flex; align-items: center;">
                             <div style="flex: 1;">
-                            <img src="${this.bookPhoto}" alt="Image" style="width: 100px; height: auto;">
+                            <img src="${this.bookPhoto}" alt="BookImage on Map" style="width: 100px; height: auto;">
                             </div>
                             <div style="flex: 2; margin-left: 10px;">
                             <p>SomeOne from ${this.city}, ${this.country} <br> bought <strong>${this.bookTitle}</strong> with free delivery</p>

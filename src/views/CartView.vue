@@ -59,7 +59,7 @@
                 <img
                   :src="item.product.imageUrl"
                   class="img-fluid"
-                  alt="Item"
+                  alt="Item image"
                   style="max-width: 80%; height: auto"
                 />
               </div>

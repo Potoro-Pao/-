@@ -33,7 +33,7 @@
                     placeholder="Please enter the image link"
                   />
                 </div>
-                <img class="img-fluid" :src="tempProduct.imageUrl" alt="" />
+                <img class="img-fluid" :src="tempProduct.imageUrl" alt="product main image" />
               </div>
               <div v-if="Array.isArray(tempProduct.imagesUrl)">
                 <h4>Other Images</h4>
@@ -41,7 +41,7 @@
                   v-for="(img, key) in tempProduct.imagesUrl"
                   :key="key + 123"
                 >
-                  <img :src="img" alt="" class="img-fluid" />
+                  <img :src="img" alt="additional product other images" class="img-fluid" />
                   <input
                     type="text"
                     class="form-control"

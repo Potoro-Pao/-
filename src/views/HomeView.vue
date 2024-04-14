@@ -44,7 +44,7 @@
                           height: 100px;
                           border-radius: 50%;
                         "
-                        alt=""
+                        alt="Ludwig Wittgenstein Portrait"
                       />
                     </div>
                     <p class="mb-0">
@@ -82,7 +82,7 @@
             <img
               style="object-fit: cover"
               src="/Bookset1.jpg"
-              alt="Bestselling Books"
+              alt="The Inheritance Cycle Bookset"
               class="img-fluid"
             />
           </div>
@@ -92,7 +92,7 @@
             <img
               style="object-fit: cover"
               src="/Bookset3.png"
-              alt="Lorem ipsum"
+              alt="The Blue Ant Trilogy Bookset"
               class="img-fluid"
             />
           </div>
@@ -126,7 +126,7 @@
             <img
               style="object-fit: cover"
               src="/Bookset3.jpg"
-              alt="Bestselling Books"
+              alt="The Old Kingdom Chronicles Bookset"
               class="img-fluid"
             />
           </div>
@@ -192,7 +192,7 @@
                 >
                   <img
                     src="/50Percent.jpg"
-                    alt=""
+                    alt="50% coupon image"
                     style="width: 100%; height: 100%; object-fit: cover"
                   />
                 </div>

@@ -26,7 +26,7 @@
             <td>
               <img
                 :src="product.imageUrl"
-                alt=""
+                alt="product main image"
                 class="img-fluid"
                 style="max-width: 100px"
               />

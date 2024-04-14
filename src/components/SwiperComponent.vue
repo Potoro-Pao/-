@@ -16,7 +16,7 @@
         <img
           loop
           src="/poster1.jpg"
-          alt=""
+          alt="ad image about black friday sale"
         />
         <div class="text-overlay">Incoming Big Sale!</div>
 
@@ -25,7 +25,7 @@
         <img
           loop
           src="/poster2.jpg"
-          alt=""
+          alt="ad image about reading field trip"
         />
         <div class="text-overlay">Join Us on Reading Fieldtrip!</div>
 
@@ -34,7 +34,7 @@
         <img
           loop
           src="/poster3.jpg"
-          alt=""
+          alt="ad image about meeting author"
         />
         <div class="text-overlay">Meet your Favorite Author!</div>
       </swiper-slide>
