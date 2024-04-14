@@ -1,6 +1,9 @@
 <template>
   <loading v-model:active="isLoading"></loading>
   <div class="container mt-5">
+    <div class="container mt-5">
+      <breadCrumbsComponent :breadcrumbs="breadcrumbs"></breadCrumbsComponent>
+    </div>
     <h2>Categories</h2>
     <div class="row my-4">
       <div id="categoriesScroll" class="overflow-auto">
@@ -25,10 +28,12 @@
         v-for="product in products"
         :key="product.id"
       >
-        <router-link :to="`/product/${product.id}`"
-         class="card mb-3 w-100 d-flex flex-column text-decoration-none">
+        <router-link
+          :to="`/product/${product.id}`"
+          class="card mb-3 w-100 d-flex flex-column text-decoration-none"
+        >
           <img
-            style="object-fit: contain; height: 250px;"
+            style="object-fit: contain; height: 250px"
             :src="product.imageUrl"
             class="card-img-top"
             alt="Product Image"
@@ -57,6 +62,7 @@ import axios from 'axios';
 import { mapActions } from 'pinia';
 import cartStore from '../stores/cartStore';
 import pagC from '../components/PaginationComponent.vue';
+import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -64,6 +70,7 @@ export default {
   components: {
     Loading,
     pagC,
+    breadCrumbsComponent,
   },
   data() {
     return {
@@ -90,6 +97,19 @@ export default {
       deep: true,
     },
   },
+  computed: {
+    breadcrumbs() {
+      const baseCrumbs = [
+        { path: '/', title: 'Home' },
+        { path: '/products', title: 'Products' },
+      ];
+      const category = this.$route.query.categories;
+      if (category) {
+        baseCrumbs.push({ path: `/products?categories=${category}`, title: category });
+      }
+      return baseCrumbs;
+    },
+  },
   methods: {
     ...mapActions(cartStore, ['addToCart']),
 
@@ -114,6 +134,6 @@ export default {
 .card:hover {
   transform: scale(1.02);
   transition: transform 0.2s;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>

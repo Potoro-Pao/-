@@ -4,9 +4,16 @@
     class="position-fixed top-0 end-0 p-3"
     style="z-index: 11; top: 65px !important"
   >
-  <TC ref="TToast" :message="ToastMessage" :bgClass="ToastType"></TC>
+    <TC ref="TToast" :message="ToastMessage" :bgClass="ToastType"></TC>
   </div>
   <div class="container">
+    <div class="container mt-5">
+      <div class="row">
+        <breadCrumbsComponent
+          :breadcrumbs="[{ path: '/', title: 'Home' }]"
+        ></breadCrumbsComponent>
+      </div>
+    </div>
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-6">
@@ -71,7 +78,7 @@
               </p>
             </div>
           </div>
-          <div class="col-lg-6" style="text-align: right">
+          <div class="col-lg-6">
             <img
               style="object-fit: cover"
               src="/Bookset1.jpg"
@@ -82,7 +89,6 @@
         </div>
         <div class="row">
           <div class="col-lg-6">
-            <!-- 图片在大屏幕上将显示在左侧 -->
             <img
               style="object-fit: cover"
               src="/Bookset3.png"
@@ -91,9 +97,9 @@
             />
           </div>
           <div class="col-lg-6 d-flex align-items-center">
-            <div class="text-center w-100">
+            <div class="text-center w-100 mt-2">
               <h4>The Blue Ant trilogy</h4>
-              <p class="me-5" style="line-height: 2rem">
+              <p style="line-height: 2rem">
                 <strong>The Blue Ant trilogy</strong> is a series of science
                 fiction novels by William Gibson. The novels are Pattern
                 Recognition (2003), Spook Country (2007), and Zero History
@@ -105,18 +111,18 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-lg-6 d-flex align-items-center">
+          <div class="col-lg-6 d-flex align-items-center mt-5">
             <div class="text-center w-100">
               <h4>The Old Kingdom Chronicles</h4>
               <p style="line-height: 2rem">
-                <strong>The Old Kingdom Chronicles</strong>
-                is a series of fantasy novels by Garth Nix. The series follows
-                the adventures of Sabriel, Lirael, and Abhorsen as they fight to
-                protect the Old Kingdom from evil forces.
+                <strong>The Old Kingdom Chronicles</strong> is a series of
+                fantasy novels by Garth Nix. The series follows the adventures
+                of Sabriel, Lirael, and Abhorsen as they fight to protect the
+                Old Kingdom from evil forces.
               </p>
             </div>
           </div>
-          <div class="col-lg-6" style="text-align: right">
+          <div class="col-lg-6">
             <img
               style="object-fit: cover"
               src="/Bookset3.jpg"
@@ -221,6 +227,7 @@ import MapC from '../components/MapComponent.vue';
 import SwiperC from '../components/SwiperComponent.vue';
 import HeaderC from '../components/HeaderComponent.vue';
 import TC from '../components/toastComponent.vue';
+import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
 
 export default {
   data() {
@@ -236,6 +243,7 @@ export default {
     MapC,
     SwiperC,
     HeaderC,
+    breadCrumbsComponent,
   },
   methods: {
     handleShowToast(data) {

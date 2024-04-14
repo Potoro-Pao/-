@@ -1,6 +1,7 @@
 <template>
   <loading v-model:active="isLoading"></loading>
   <div class="container my-5">
+    <breadCrumbsComponent :breadcrumbs="breadcrumbs"></breadCrumbsComponent>
     <div class="row">
       <!-- Product Information and Checkout Card -->
       <div class="col-lg-8 d-flex">
@@ -84,7 +85,6 @@
   <div class="container">
     <div class="row">
       <h3>Short Description</h3>
-      <!-- Only render the content when it exists -->
       <div v-if="product.content" class="col-md-8">
         <p
           class="card-text"
@@ -103,36 +103,34 @@
     </div>
   </div>
   <div class="container">
-      <div class="row">
-        <h3
-          v-if="product.imagesUrl && product.imagesUrl.length > 0"
-          class="mb-5 mt-4"
-        >
-          Image Gallery
-        </h3>
-        <div class="row g-3">
+    <div class="row">
+      <h3
+        v-if="product.imagesUrl && product.imagesUrl.length > 0"
+        class="mb-5 mt-4"
+      >
+        Image Gallery
+      </h3>
+      <div
+        class="row g-3"
+        v-if="product.imagesUrl && product.imagesUrl.length > 0"
+      >
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           <div
-            v-if="product.imagesUrl && product.imagesUrl.length > 0"
-            class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3"
+            v-for="(image, index) in product.imagesUrl"
+            :key="index"
+            class="col"
           >
-            <div
-              v-for="(image, index) in product.imagesUrl"
-              :key="index"
-              class="col"
-            >
-              <div class="h-100">
-                <img
-                  :src="image"
-                  class="img-fluid"
-                  style="height: 100%; width: 100%; object-fit: cover"
-                  alt="Product Image"
-                />
-              </div>
-            </div>
+            <img
+              :src="image"
+              class="img-fluid"
+              style="height: 100%; width: 100%; object-fit: cover"
+              alt="Product Image"
+            />
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -140,42 +138,50 @@ import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import { mapActions } from 'pinia';
 import cartStore from '../stores/cartStore';
+import breadCrumbsComponent from '../components/breadCrumbsComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
 export default {
   components: {
     Loading,
+    breadCrumbsComponent,
   },
   data() {
     return {
       isLoading: true,
       product: {},
       qty: 1,
-      showFullContent: false, // Control display state of content
-      format: {
-        author: '',
-        ISBN: '',
-        pages: '',
-        publisher: '',
-      },
+      showFullContent: false,
+      format: {},
+      category: this.$route.query.category || 'Default Category',
     };
   },
+  computed: {
+    breadcrumbs() {
+      const baseCrumbs = [
+        { path: '/', title: 'Home' },
+        { path: '/products', title: 'Products' },
+        { path: '', title: 'Product Details' },
+      ];
+      return baseCrumbs;
+    },
+  },
   methods: {
-    formatted(format) {
-      this.format = JSON.parse(format);
-    },
-    toggleContent() {
-      this.showFullContent = !this.showFullContent; // Toggle content display state
-    },
     ...mapActions(cartStore, ['addToCart']),
     getProduct() {
       const { id } = this.$route.params;
       axios.get(`${VITE_URL}/api/${VITE_API}/product/${id}`).then((res) => {
         this.isLoading = false;
         this.product = res.data.product;
-        this.formatted(this.product.description);
+        this.category = this.product.category;
+        if (res.data.product.description) {
+          this.format = JSON.parse(res.data.product.description);
+        }
       });
+    },
+    toggleContent() {
+      this.showFullContent = !this.showFullContent;
     },
   },
   mounted() {
