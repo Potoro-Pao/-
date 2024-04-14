@@ -66,7 +66,7 @@
         </tbody>
       </table>
     </div>
-    <PagC :pages="pages" :getProduct="getProduct" basePath="/admin" />
+    <PaginationComponent :pages="pages" :getProduct="getProduct" basePath="/admin" />
   </div>
   <!-- Modal components -->
   <DashboardProModal
@@ -83,9 +83,9 @@
 
 <script>
 import axios from 'axios';
-import DashboardDelModal from '../../components/DashboardDelModal.vue';
-import PagC from '../../components/PaginationComponent.vue';
-import DashboardProModal from '../../components/DashboardProModal.vue';
+import DashboardDelModal from '@/components/DashboardDelModal.vue';
+import PaginationComponent from '@/components/PaginationComponent.vue';
+import DashboardProModal from '@/components/DashboardProModal.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 
@@ -154,7 +154,7 @@ export default {
       });
     },
   },
-  components: { PagC, DashboardProModal, DashboardDelModal },
+  components: { PaginationComponent, DashboardProModal, DashboardDelModal },
   mounted() {
     const token = document.cookie.replace(
       /(?:(?:^|.*;\s*)hexVueToken\s*=\s*([^;]*).*$)|^.*$/,

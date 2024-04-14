@@ -1,17 +1,17 @@
 <template>
 <div class="position-relative" style="min-height: 100vh">
-  <NavC basePath="/admin"></NavC>
-  <BgC></BgC>
+  <NavbarComponent basePath="/admin"></NavbarComponent>
+  <BgComponent></BgComponent>
   <RouterView></RouterView>
 </div>
-<footer-c class="mt-6 w-100"></footer-c>
+<FooterComponent class="mt-6 w-100"></FooterComponent>
 </template>
 
 <script>
 import axios from 'axios';
-import BgC from '../../components/BgComponent.vue';
-import FooterC from '../../components/FooterComponent.vue';
-import NavC from '../../components/NavbarComponent.vue';
+import BgComponent from '@/components/BgComponent.vue';
+import FooterComponent from '@/components/FooterComponent.vue';
+import NavbarComponent from '@/components/NavbarComponent.vue';
 
 const { VITE_URL } = import.meta.env;
 
@@ -30,9 +30,9 @@ export default {
   },
 
   components: {
-    BgC,
-    FooterC,
-    NavC,
+    BgComponent,
+    FooterComponent,
+    NavbarComponent,
   },
   mounted() {
     const token = document.cookie.replace(

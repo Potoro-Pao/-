@@ -1,5 +1,5 @@
 <template>
-  <BgC></BgC>
+  <BgComponent></BgComponent>
   <div class="container">
     <div class="row justify-content-center">
       <h1 class="h3 mb-3 mt-5 font-weight-normal text-center">Admin Log in</h1>
@@ -52,7 +52,7 @@
 <script>
 import axios from 'axios';
 import { Toast } from 'bootstrap';
-import BgC from '../../components/BgComponent.vue';
+import BgComponent from '@/components/BgComponent.vue';
 
 const { VITE_URL } = import.meta.env;
 
@@ -66,7 +66,7 @@ export default {
     };
   },
   components: {
-    BgC,
+    BgComponent,
   },
   methods: {
     logBackHome() {

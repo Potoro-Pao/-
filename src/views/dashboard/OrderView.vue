@@ -67,9 +67,9 @@
 <script>
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
-import DashboardDelModal from '../../components/DashboardDelModal.vue';
-import DashboardOrderModal from '../../components/DashboardOrderModal.vue';
-import PaginationComponent from '../../components/PaginationComponent.vue';
+import DashboardDelModal from '@/components/DashboardDelModal.vue';
+import DashboardOrderModal from '@/components/DashboardOrderModal.vue';
+import PaginationComponent from '@/components/PaginationComponent.vue';
 
 const { VITE_URL, VITE_API } = import.meta.env;
 export default {
